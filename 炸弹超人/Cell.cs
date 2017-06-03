@@ -25,11 +25,23 @@ namespace 炸弹超人
         /// <summary>
         /// 公开的元素构造函数
         /// </summary>
-        /// <param name="location">坐标</param>
+        /// <param name="location">像素坐标</param>
+        /// <param name="tabelLocation">在元素表里的坐标</param>
         public Cell(Point location,Point tabelLocation)
         {
             Location = location;
             TabelLocation = tabelLocation;
+        }
+
+        /// <summary>
+        /// 公开的元素构造函数
+        /// </summary>
+        /// <param name="GameMap">对象Map</param>
+        /// <param name="tabelLocation">在元素表里的坐标</param>
+        public Cell(Map GameMap, Point tabelLocation)
+        {
+            TabelLocation = tabelLocation;
+            Location = new Point(GameMap.PaddingSize.Width + tabelLocation.X* GameMap.CellSize.Width, GameMap.PaddingSize.Height + tabelLocation.Y* GameMap.CellSize.Height);
         }
     }
 }

@@ -17,7 +17,8 @@ namespace 炸弹超人
         {
             Ground=0,//地面
             Stone=1,//石头
-            Wall=2//墙
+            Wall=2,//墙
+            Mine=3//炸弹
         }
         /// <summary>
         /// 固定的游戏地图元素表格宽度
@@ -114,7 +115,7 @@ namespace 炸弹超人
             CreateWalls();
             //绘制石头层
             using (Graphics MapGraphics = Graphics.FromImage(Ground))
-                MapGraphics.DrawImage(StonesBitmap, Point.Empty);
+                MapGraphics.DrawImageUnscaled(StonesBitmap, Point.Empty);
         }
 
         /// <summary>
@@ -147,9 +148,9 @@ namespace 炸弹超人
                     for (int X = 0; X < TabelWidth; X++)
                     {
                         if (MapCells[Y, X] == CellType.Stone)
-                            StonesGraphics.DrawImage(StoneCellBitmap, DrawLocation.X, DrawLocation.Y, CellSize.Width, CellSize.Height);
+                            StonesGraphics.DrawImageUnscaled(StoneCellBitmap, DrawLocation.X, DrawLocation.Y, CellSize.Width, CellSize.Height);
                         else
-                            EmptyCell.Add(new Cell(DrawLocation,new Point(Y,X)));
+                            EmptyCell.Add(new Cell(DrawLocation,new Point(X,Y)));
                         DrawLocation.Offset(CellSize.Width,0);
                     }
                     DrawLocation.Offset(PaddingSize.Width - DrawLocation.X, 0);
@@ -179,7 +180,8 @@ namespace 炸弹超人
             {
                 Index = UnityRandom.Next(EmptyCellClone.Count);
                 Walls.Add(EmptyCellClone[Index]);
-                MapCellsClone[Walls.Last().TabelLocation.X, Walls.Last().TabelLocation.Y] = CellType.Wall;
+                MapCellsClone[Walls.Last().TabelLocation.Y, Walls.Last().TabelLocation.X] = CellType.Wall;
+                //MapCellsClone[Walls.Last().TabelLocation.X, Walls.Last().TabelLocation.Y] = CellType.Wall;
                 EmptyCellClone.RemoveAt(Index);
                 WallsCount--;
             }
@@ -206,7 +208,7 @@ namespace 炸弹超人
             {
                 foreach (Cell Wall in Walls)
                 {
-                    WallsGraphics.DrawImage(WallCellBitmap, Wall.Location.X, Wall.Location.Y, CellSize.Width, CellSize.Height);
+                    WallsGraphics.DrawImageUnscaled(WallCellBitmap, Wall.Location.X, Wall.Location.Y, CellSize.Width, CellSize.Height);
                 }
             }
             return WallsBitmap;
@@ -216,15 +218,15 @@ namespace 炸弹超人
         /// 创建敌人
         /// </summary>
         /// <returns>敌人列表坐标</returns>
-        public List<Cell> CreateEnemy()
+        public List<EnemyModel> CreateEnemy()
         {
-            List<Cell> EnemyList = new List<Cell>();
+            List<EnemyModel> EnemyList = new List<EnemyModel>();
             int EnemyCount = 5;
             int Index;
             while (EnemyCount > 0)
             {
                 Index = UnityRandom.Next(EmptyCellClone.Count);
-                EnemyList.Add(EmptyCellClone[Index]);
+                EnemyList.Add(new EnemyModel(this, EmptyCellClone[Index].TabelLocation));
                 EnemyCount--;
             }
             return EnemyList;
