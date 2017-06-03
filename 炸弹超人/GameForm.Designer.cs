@@ -42,6 +42,8 @@
             this.Text = "炸弹超人";
             this.Load += new System.EventHandler(this.GameForm_Load);
             this.Click += new System.EventHandler(this.GameForm_Click);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GameForm_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.GameForm_KeyPress);
             this.ResumeLayout(false);
 
         }

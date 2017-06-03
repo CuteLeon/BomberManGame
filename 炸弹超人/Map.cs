@@ -34,7 +34,7 @@ namespace 炸弹超人
         /// <summary>
         /// 只读属性：在构造对象时根据世界尺寸和地图元素表壳尺寸计算元素尺寸
         /// </summary>
-        private readonly Size CellSize;
+        public readonly Size CellSize;
         /// <summary>
         /// 只读属性：在构造对象时根据世界尺寸和地图元素表壳尺寸计算地图与屏幕间隔
         /// </summary>
@@ -177,6 +177,7 @@ namespace 炸弹超人
             {
                 Index = UnityRandom.Next(EmptyCellClone.Count);
                 Walls.Add(EmptyCellClone[Index]);
+                MapCells[Walls.Last().TabelLocation.X, Walls.Last().TabelLocation.Y] = CellType.Wall;
                 EmptyCellClone.RemoveAt(Index);
                 WallsCount--;
             }
@@ -213,15 +214,15 @@ namespace 炸弹超人
         /// 创建敌人
         /// </summary>
         /// <returns>敌人列表坐标</returns>
-        private List<Point> CreateEnemy()
+        public List<Cell> CreateEnemy()
         {
-            List<Point> EnemyList = new List<Point>();
+            List<Cell> EnemyList = new List<Cell>();
             int EnemyCount = 5;
             int Index;
             while (EnemyCount > 0)
             {
                 Index = UnityRandom.Next(EmptyCellClone.Count);
-                EnemyList.Add(EmptyCellClone[Index].TabelLocation);
+                EnemyList.Add(EmptyCellClone[Index]);
                 EnemyCount--;
             }
             return EnemyList;
