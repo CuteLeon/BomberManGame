@@ -30,7 +30,8 @@ namespace 炸弹超人
         /// <summary>
         /// 地图元素类型二维数组
         /// </summary>
-        public CellType[,] MapCells = new CellType[TabelHeight,TabelWidth];
+        private CellType[,] MapCells = new CellType[TabelHeight,TabelWidth];
+        public CellType[,] MapCellsClone;
         /// <summary>
         /// 只读属性：在构造对象时根据世界尺寸和地图元素表壳尺寸计算元素尺寸
         /// </summary>
@@ -42,7 +43,7 @@ namespace 炸弹超人
         /// <summary>
         /// 私有成员：记录游戏世界的尺寸
         /// </summary>
-        private Size WorldSize;
+        private readonly Size WorldSize;
         /// <summary>
         /// 墙元素列表
         /// </summary>
@@ -75,11 +76,11 @@ namespace 炸弹超人
         /// <summary>
         /// 通关门在Tabel里的坐标
         /// </summary>
-        private Cell DoorLocation;
+        public Cell DoorLocation;
         /// <summary>
         /// 奖励在Tabel里的坐标
         /// </summary>
-        private Cell GiftLocation;
+        public Cell GiftLocation;
 
         //todo:构造时计算出拉伸后的stone 和wall 防止 多次drawimage时拉伸计算
 
@@ -155,6 +156,7 @@ namespace 炸弹超人
                     DrawLocation.Offset(0,CellSize.Height);
                 }
             }
+            MapCellsClone = (CellType[,])MapCells.Clone();
             return StonesBitmap;
         }
 
@@ -177,7 +179,7 @@ namespace 炸弹超人
             {
                 Index = UnityRandom.Next(EmptyCellClone.Count);
                 Walls.Add(EmptyCellClone[Index]);
-                MapCells[Walls.Last().TabelLocation.X, Walls.Last().TabelLocation.Y] = CellType.Wall;
+                MapCellsClone[Walls.Last().TabelLocation.X, Walls.Last().TabelLocation.Y] = CellType.Wall;
                 EmptyCellClone.RemoveAt(Index);
                 WallsCount--;
             }
@@ -233,6 +235,7 @@ namespace 炸弹超人
         /// </summary>
         public void ResetMap()
         {
+            MapCellsClone = (CellType[,])MapCells.Clone();
             CreateWalls();
             GC.Collect();
         }
