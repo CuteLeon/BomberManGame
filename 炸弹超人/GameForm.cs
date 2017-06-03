@@ -15,10 +15,6 @@ namespace 炸弹超人
     public partial class GameForm : Form
     {
         /// <summary>
-        /// 全局Graphics
-        /// </summary>
-        Graphics UnityGraphics;
-        /// <summary>
         /// 敌人列表
         /// </summary>
         List<EnemyModel> EnemyList;
@@ -45,7 +41,6 @@ namespace 炸弹超人
             System.Windows.Forms.Control.CheckForIllegalCrossThreadCalls = false;
 
             this.SetBounds(0,0,Screen .PrimaryScreen .Bounds .Width ,Screen .PrimaryScreen .Bounds .Height );
-            UnityGraphics = this.CreateGraphics();
             GameMap = new Map(Screen.PrimaryScreen.Bounds.Size);
         }
 
@@ -77,15 +72,15 @@ namespace 炸弹超人
                                 {
                                     Thread.Sleep(10);
                                     //屏蔽掉会有很有趣的轨迹效果
-                                    UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    this.CreateGraphics().DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                     Player.Location.Offset(0, -5);
-                                    UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
+                                    this.CreateGraphics().DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                     DrawMines();
                                 }
                                 //屏蔽掉，会有很有趣的痕迹效果
-                                UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                this.CreateGraphics().DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                 Player.Location = new Point(Player.Location.X,Target);
-                                UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
+                                this.CreateGraphics().DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                 PlayerMoveing = false;
                                 DrawMines();
                             });
@@ -104,15 +99,15 @@ namespace 炸弹超人
                                 {
                                     Thread.Sleep(10);
                                     //屏蔽掉会有很有趣的轨迹效果
-                                    UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    this.CreateGraphics().DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                     Player.Location.Offset(0, 5);
-                                    UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
+                                    this.CreateGraphics().DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                     //DrawMines();
                                 }
                                 //屏蔽掉，会有很有趣的痕迹效果
-                                UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                this.CreateGraphics().DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                 Player.Location = new Point(Player.Location.X, Target);
-                                UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
+                                this.CreateGraphics().DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                 PlayerMoveing = false;
                                 DrawMines();
                             });
@@ -131,15 +126,15 @@ namespace 炸弹超人
                                 {
                                     Thread.Sleep(10);
                                     //屏蔽掉会有很有趣的轨迹效果
-                                    UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    this.CreateGraphics().DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                     Player.Location.Offset(-5,0);
-                                    UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
+                                    this.CreateGraphics().DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                     //DrawMines();
                                 }
                                 //屏蔽掉，会有很有趣的痕迹效果
-                                UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                this.CreateGraphics().DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                 Player.Location = new Point(Target, Player.Location.Y);
-                                UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
+                                this.CreateGraphics().DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                 PlayerMoveing = false;
                                 DrawMines();
                             });
@@ -158,15 +153,15 @@ namespace 炸弹超人
                                 {
                                     Thread.Sleep(10);
                                     //屏蔽掉会有很有趣的轨迹效果
-                                    UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    this.CreateGraphics().DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                     Player.Location.Offset(5, 0);
-                                    UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
+                                    this.CreateGraphics().DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                     //DrawMines();
                                 }
                                 //屏蔽掉，会有很有趣的痕迹效果
-                                UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                this.CreateGraphics().DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                 Player.Location = new Point(Target, Player.Location.Y);
-                                UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
+                                this.CreateGraphics().DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                 PlayerMoveing = false;
                                 DrawMines();
                             });
@@ -183,8 +178,8 @@ namespace 炸弹超人
                             Mines.Last().Blast +=new MineModel.BlastEventHander(BombBlast);
 
                             GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X] = Map.CellType.Mine;
-                            UnityGraphics.DrawImage(UnityResource.Mine,new Rectangle(Mines.Last().Location,GameMap.CellSize));
-                            UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
+                            this.CreateGraphics().DrawImage(UnityResource.Mine,new Rectangle(Mines.Last().Location,GameMap.CellSize));
+                            this.CreateGraphics().DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                         }
                         break;
                     }
@@ -197,17 +192,17 @@ namespace 炸弹超人
         private void ResetGame()
         {
             GameMap.ResetMap();
-            UnityGraphics.DrawImageUnscaled(GameMap.Ground, Point.Empty);
-            UnityGraphics.DrawImageUnscaled(GameMap.DrawWalls(), Point.Empty);
+            this.CreateGraphics().DrawImageUnscaled(GameMap.Ground, Point.Empty);
+            this.CreateGraphics().DrawImageUnscaled(GameMap.DrawWalls(), Point.Empty);
 
             Player = new PlayerModel(GameMap,new Point(1, 1));
-            UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
+            this.CreateGraphics().DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
 
             Mines = new List<MineModel>();
 
             EnemyList = GameMap.CreateEnemy();
             foreach (Cell Enemy in EnemyList)
-                UnityGraphics.DrawImage(UnityResource.Enemy, new Rectangle(Enemy.Location, GameMap.CellSize));
+                this.CreateGraphics().DrawImage(UnityResource.Enemy, new Rectangle(Enemy.Location, GameMap.CellSize));
 
             this.KeyDown -= new System.Windows.Forms.KeyEventHandler(this.GameForm_KeyDown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GameForm_KeyDown);
@@ -220,7 +215,7 @@ namespace 炸弹超人
         {
             foreach (Cell Mine in Mines)
             {
-                UnityGraphics.DrawImage(UnityResource.Mine, new Rectangle(Mine.Location, GameMap.CellSize));
+                this.CreateGraphics().DrawImage(UnityResource.Mine, new Rectangle(Mine.Location, GameMap.CellSize));
             }
         }
 
@@ -246,8 +241,8 @@ namespace 炸弹超人
                 Player.BombCount++;
                 SmokePoints.Add(sender.Location);
                 GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X] = Map.CellType.Ground;
-                UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(sender.Location, GameMap.CellSize));
-                //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(sender.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), sender.Location);
+                this.CreateGraphics().DrawImage(UnityResource.Smoke, new Rectangle(sender.Location, GameMap.CellSize));
+                //this.CreateGraphics().DrawImage(GameMap.Ground.Clone(new Rectangle(sender.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), sender.Location);
                 Point DrawLocation;
                 for (int Radius = 1; Radius <= Player.BlastRadius; Radius++)
                 {
@@ -256,14 +251,14 @@ namespace 炸弹超人
                     {
                         SmokePoints.Add(DrawLocation);
                         GameMap.MapCellsClone[sender.TabelLocation.Y - Radius, sender.TabelLocation.X] = Map.CellType.Ground;
-                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
-                        //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(DrawLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), DrawLocation);
+                        this.CreateGraphics().DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                        //this.CreateGraphics().DrawImage(GameMap.Ground.Clone(new Rectangle(DrawLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), DrawLocation);
                         break;
                     }
                     else if (GameMap.MapCellsClone[sender.TabelLocation.Y - Radius, sender.TabelLocation.X] == Map.CellType.Ground)
                     {
                         SmokePoints.Add(DrawLocation);
-                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                        this.CreateGraphics().DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
                     }
                     else if (GameMap.MapCellsClone[sender.TabelLocation.Y - Radius, sender.TabelLocation.X] == Map.CellType.Stone)
                         break;
@@ -281,14 +276,14 @@ namespace 炸弹超人
                     {
                         SmokePoints.Add(DrawLocation);
                         GameMap.MapCellsClone[sender.TabelLocation.Y + Radius, sender.TabelLocation.X] = Map.CellType.Ground;
-                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
-                        //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(DrawLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), DrawLocation);
+                        this.CreateGraphics().DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                        //this.CreateGraphics().DrawImage(GameMap.Ground.Clone(new Rectangle(DrawLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), DrawLocation);
                         break;
                     }
                     else if (GameMap.MapCellsClone[sender.TabelLocation.Y + Radius, sender.TabelLocation.X] == Map.CellType.Ground)
                     {
                         SmokePoints.Add(DrawLocation);
-                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                        this.CreateGraphics().DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
                     }
                     else if (GameMap.MapCellsClone[sender.TabelLocation.Y + Radius, sender.TabelLocation.X] == Map.CellType.Stone)
                         break;
@@ -306,14 +301,14 @@ namespace 炸弹超人
                     {
                         SmokePoints.Add(DrawLocation);
                         GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X - Radius] = Map.CellType.Ground;
-                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
-                        //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(DrawLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), DrawLocation);
+                        this.CreateGraphics().DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                        //this.CreateGraphics().DrawImage(GameMap.Ground.Clone(new Rectangle(DrawLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), DrawLocation);
                         break;
                     }
                     else if (GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X - Radius] == Map.CellType.Ground)
                     {
                         SmokePoints.Add(DrawLocation);
-                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                        this.CreateGraphics().DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
                     }
                     else if (GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X - Radius] == Map.CellType.Stone)
                         break;
@@ -331,14 +326,14 @@ namespace 炸弹超人
                     {
                         SmokePoints.Add(DrawLocation);
                         GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X + Radius] = Map.CellType.Ground;
-                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
-                        //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(DrawLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), DrawLocation);
+                        this.CreateGraphics().DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                        //this.CreateGraphics().DrawImage(GameMap.Ground.Clone(new Rectangle(DrawLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), DrawLocation);
                         break;
                     }
                     else if (GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X + Radius] == Map.CellType.Ground)
                     {
                         SmokePoints.Add(DrawLocation);
-                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                        this.CreateGraphics().DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
                     }
                     else if (GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X + Radius] == Map.CellType.Stone)
                         break;
@@ -367,7 +362,7 @@ namespace 炸弹超人
             {
                 try
                 {
-                    UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(SmokePoint, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), SmokePoint);
+                    this.CreateGraphics().DrawImage(GameMap.Ground.Clone(new Rectangle(SmokePoint, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), SmokePoint);
                 }
                 catch (Exception ex) { }
             }

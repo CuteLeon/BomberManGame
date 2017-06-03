@@ -12,11 +12,11 @@ namespace 炸弹超人
         /// <summary>
         /// 爆炸杀伤半径（默认为 1）
         /// </summary>
-        public byte BlastRadius = 2;
+        public byte BlastRadius = 3;
         /// <summary>
         /// 允许同时放置的炸弹总数（默认为 1）
         /// </summary>
-        public Byte BombCount=1;
+        public Byte BombCount=3;
         /// <summary>
         /// 继承自Cell类的构造函数
         /// </summary>
