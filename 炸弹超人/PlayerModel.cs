@@ -10,9 +10,13 @@ namespace 炸弹超人
     class PlayerModel:Cell
     {
         /// <summary>
+        /// 爆炸杀伤半径（默认为 1）
+        /// </summary>
+        public byte BlastRadius = 2;
+        /// <summary>
         /// 允许同时放置的炸弹总数（默认为 1）
         /// </summary>
-        private Byte BombCount=1;
+        public Byte BombCount=1;
         /// <summary>
         /// 继承自Cell类的构造函数
         /// </summary>
@@ -36,7 +40,7 @@ namespace 炸弹超人
         {
             if (BombCount > 0)
             {
-                //BombCount--;
+                BombCount--;
                 return true;
             }
             else

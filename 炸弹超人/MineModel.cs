@@ -17,7 +17,10 @@ namespace 炸弹超人
         /// 爆炸事件
         /// </summary>
         public event BlastEventHander Blast;
-
+        /// <summary>
+        /// 是否已经起爆
+        /// </summary>
+        private bool Blasted;
         /// <summary>
         /// 继承自Cell类的构造函数
         /// </summary>
@@ -28,8 +31,20 @@ namespace 炸弹超人
             System.Threading.ThreadPool.QueueUserWorkItem(delegate {
                 //炸弹延缓5秒爆炸
                 System.Threading.Thread.Sleep(3000);
+                if (Blasted) return;
                 Blast(this);
+                Blasted = true;
             });
+        }
+
+        /// <summary>
+        /// 立即起爆！
+        /// </summary>
+        public void BlastNow()
+        {
+            if (Blasted) return;
+            Blast(this);
+            Blasted = true;
         }
 
     }

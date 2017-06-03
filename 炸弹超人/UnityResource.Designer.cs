@@ -123,6 +123,16 @@ namespace 炸弹超人 {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap Smoke {
+            get {
+                object obj = ResourceManager.GetObject("Smoke", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap Stone {
             get {
                 object obj = ResourceManager.GetObject("Stone", resourceCulture);

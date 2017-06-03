@@ -75,15 +75,15 @@ namespace 炸弹超人
                                 int Target = (Player.TabelLocation.Y) * GameMap.CellSize.Height + GameMap.PaddingSize.Height;
                                 while (Player.Location.Y > Target+5)
                                 {
-                                    //屏蔽掉会有很有趣的轨迹效果
-                                    //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
-                                    Player.Location.Offset(0, -5);
                                     Thread.Sleep(10);
+                                    //屏蔽掉会有很有趣的轨迹效果
+                                    UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    Player.Location.Offset(0, -5);
                                     UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
-                                    //DrawMines();
+                                    DrawMines();
                                 }
                                 //屏蔽掉，会有很有趣的痕迹效果
-                                //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                 Player.Location = new Point(Player.Location.X,Target);
                                 UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                 PlayerMoveing = false;
@@ -102,15 +102,15 @@ namespace 炸弹超人
                                 int Target = (Player.TabelLocation.Y) * GameMap.CellSize.Height + GameMap.PaddingSize.Height;
                                 while (Player.Location.Y < Target-5)
                                 {
-                                    //屏蔽掉会有很有趣的轨迹效果
-                                    //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
-                                    Player.Location.Offset(0, 5);
                                     Thread.Sleep(10);
+                                    //屏蔽掉会有很有趣的轨迹效果
+                                    UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    Player.Location.Offset(0, 5);
                                     UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                     //DrawMines();
                                 }
                                 //屏蔽掉，会有很有趣的痕迹效果
-                                //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                 Player.Location = new Point(Player.Location.X, Target);
                                 UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                 PlayerMoveing = false;
@@ -129,15 +129,15 @@ namespace 炸弹超人
                                 int Target = (Player.TabelLocation.X) * GameMap.CellSize.Width + GameMap.PaddingSize.Width;
                                 while (Player.Location.X >Target+5)
                                 {
-                                    //屏蔽掉会有很有趣的轨迹效果
-                                    //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
-                                    Player.Location.Offset(-5,0);
                                     Thread.Sleep(10);
+                                    //屏蔽掉会有很有趣的轨迹效果
+                                    UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    Player.Location.Offset(-5,0);
                                     UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                     //DrawMines();
                                 }
                                 //屏蔽掉，会有很有趣的痕迹效果
-                                //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                 Player.Location = new Point(Target, Player.Location.Y);
                                 UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                 PlayerMoveing = false;
@@ -156,15 +156,15 @@ namespace 炸弹超人
                                 int Target = (Player.TabelLocation.X) * GameMap.CellSize.Width + GameMap.PaddingSize.Width;
                                 while (Player.Location.X < Target-5)
                                 {
-                                    //屏蔽掉会有很有趣的轨迹效果
-                                    //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
-                                    Player.Location.Offset(5, 0);
                                     Thread.Sleep(10);
+                                    //屏蔽掉会有很有趣的轨迹效果
+                                    UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    Player.Location.Offset(5, 0);
                                     UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                     //DrawMines();
                                 }
                                 //屏蔽掉，会有很有趣的痕迹效果
-                                //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                 Player.Location = new Point(Target, Player.Location.Y);
                                 UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                 PlayerMoveing = false;
@@ -238,10 +238,139 @@ namespace 炸弹超人
         /// </summary>
         private void BombBlast(MineModel sender)
         {
-            Debug.Print(sender.TabelLocation.ToString() + " 炸弹起爆！");
-            UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(sender.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), sender.Location);
-            GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X] = Map.CellType.Ground;
-            Mines.Remove(sender);
+            try
+            {
+                Debug.Print("炸弹 {0} , {1} 起爆！", sender.TabelLocation.X, sender.TabelLocation.Y);
+
+                List<Point> SmokePoints = new List<Point>();
+                Player.BombCount++;
+                SmokePoints.Add(sender.Location);
+                GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X] = Map.CellType.Ground;
+                UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(sender.Location, GameMap.CellSize));
+                //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(sender.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), sender.Location);
+                Point DrawLocation;
+                for (int Radius = 1; Radius <= Player.BlastRadius; Radius++)
+                {
+                    DrawLocation = new Point(sender.Location.X, sender.Location.Y - GameMap.CellSize.Height * Radius);
+                    if (GameMap.MapCellsClone[sender.TabelLocation.Y - Radius, sender.TabelLocation.X] == Map.CellType.Wall)
+                    {
+                        SmokePoints.Add(DrawLocation);
+                        GameMap.MapCellsClone[sender.TabelLocation.Y - Radius, sender.TabelLocation.X] = Map.CellType.Ground;
+                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                        //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(DrawLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), DrawLocation);
+                        break;
+                    }
+                    else if (GameMap.MapCellsClone[sender.TabelLocation.Y - Radius, sender.TabelLocation.X] == Map.CellType.Ground)
+                    {
+                        SmokePoints.Add(DrawLocation);
+                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                    }
+                    else if (GameMap.MapCellsClone[sender.TabelLocation.Y - Radius, sender.TabelLocation.X] == Map.CellType.Stone)
+                        break;
+                    else if (GameMap.MapCellsClone[sender.TabelLocation.Y - Radius, sender.TabelLocation.X] == Map.CellType.Mine)
+                    {
+                        Mines.Where(X => X.TabelLocation.Equals(new Point(sender.TabelLocation.X, sender.TabelLocation.Y - Radius)))?.First().BlastNow();
+                        break;
+                    }
+                }
+
+                for (int Radius = 1; Radius <= Player.BlastRadius; Radius++)
+                {
+                    DrawLocation = new Point(sender.Location.X, sender.Location.Y + GameMap.CellSize.Height * Radius);
+                    if (GameMap.MapCellsClone[sender.TabelLocation.Y + Radius, sender.TabelLocation.X] == Map.CellType.Wall)
+                    {
+                        SmokePoints.Add(DrawLocation);
+                        GameMap.MapCellsClone[sender.TabelLocation.Y + Radius, sender.TabelLocation.X] = Map.CellType.Ground;
+                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                        //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(DrawLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), DrawLocation);
+                        break;
+                    }
+                    else if (GameMap.MapCellsClone[sender.TabelLocation.Y + Radius, sender.TabelLocation.X] == Map.CellType.Ground)
+                    {
+                        SmokePoints.Add(DrawLocation);
+                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                    }
+                    else if (GameMap.MapCellsClone[sender.TabelLocation.Y + Radius, sender.TabelLocation.X] == Map.CellType.Stone)
+                        break;
+                    else if (GameMap.MapCellsClone[sender.TabelLocation.Y + Radius, sender.TabelLocation.X] == Map.CellType.Mine)
+                    {
+                        Mines.Where(X => X.TabelLocation.Equals(new Point(sender.TabelLocation.X, sender.TabelLocation.Y + Radius)))?.First().BlastNow();
+                        break;
+                    }
+                }
+
+                for (int Radius = 1; Radius <= Player.BlastRadius; Radius++)
+                {
+                    DrawLocation = new Point(sender.Location.X - GameMap.CellSize.Width * Radius, sender.Location.Y);
+                    if (GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X - Radius] == Map.CellType.Wall)
+                    {
+                        SmokePoints.Add(DrawLocation);
+                        GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X - Radius] = Map.CellType.Ground;
+                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                        //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(DrawLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), DrawLocation);
+                        break;
+                    }
+                    else if (GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X - Radius] == Map.CellType.Ground)
+                    {
+                        SmokePoints.Add(DrawLocation);
+                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                    }
+                    else if (GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X - Radius] == Map.CellType.Stone)
+                        break;
+                    else if (GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X - Radius] == Map.CellType.Mine)
+                    {
+                        Mines.Where(X => X.TabelLocation.Equals(new Point(sender.TabelLocation.X - Radius, sender.TabelLocation.Y)))?.First().BlastNow();
+                        break;
+                    }
+                }
+
+                for (int Radius = 1; Radius <= Player.BlastRadius; Radius++)
+                {
+                    DrawLocation = new Point(sender.Location.X + GameMap.CellSize.Width * Radius, sender.Location.Y);
+                    if (GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X + Radius] == Map.CellType.Wall)
+                    {
+                        SmokePoints.Add(DrawLocation);
+                        GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X + Radius] = Map.CellType.Ground;
+                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                        //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(DrawLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), DrawLocation);
+                        break;
+                    }
+                    else if (GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X + Radius] == Map.CellType.Ground)
+                    {
+                        SmokePoints.Add(DrawLocation);
+                        UnityGraphics.DrawImage(UnityResource.Smoke, new Rectangle(DrawLocation, GameMap.CellSize));
+                    }
+                    else if (GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X + Radius] == Map.CellType.Stone)
+                        break;
+                    else if (GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X + Radius] == Map.CellType.Mine)
+                    {
+                        Mines.Where(X => X.TabelLocation.Equals(new Point(sender.TabelLocation.X + Radius, sender.TabelLocation.Y)))?.First().BlastNow();
+                        break;
+                    }
+                }
+                ThreadPool.QueueUserWorkItem(new WaitCallback(ClearSmoke), SmokePoints);
+
+                Mines.Remove(sender);
+            }
+            catch (Exception ex) { }
+        }
+
+
+        /// <summary>
+        /// 炸弹爆炸之后，延时消散爆炸烟雾
+        /// </summary>
+        /// <param name="Smoke">烟雾坐标数组</param>
+        private void ClearSmoke(object SmokePoints)
+        {
+            Thread.Sleep(300);
+            foreach (Point SmokePoint in (List < Point >) SmokePoints)
+            {
+                try
+                {
+                    UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(SmokePoint, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), SmokePoint);
+                }
+                catch (Exception ex) { }
+            }
         }
     }
 }
