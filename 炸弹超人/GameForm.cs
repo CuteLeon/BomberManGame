@@ -33,7 +33,7 @@ namespace 炸弹超人
         /// <summary>
         /// 已经放置的炸弹列表
         /// </summary>
-        private List<Cell> Mines;
+        private List<MineModel> Mines;
         /// <summary>
         /// 玩家角色正在移动线程中
         /// </summary>
@@ -80,13 +80,14 @@ namespace 炸弹超人
                                     Player.Location.Offset(0, -5);
                                     Thread.Sleep(10);
                                     UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
-                                    DrawMines();
+                                    //DrawMines();
                                 }
                                 //屏蔽掉，会有很有趣的痕迹效果
                                 //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                 Player.Location = new Point(Player.Location.X,Target);
                                 UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                 PlayerMoveing = false;
+                                DrawMines();
                             });
                         }
                         break;
@@ -106,13 +107,14 @@ namespace 炸弹超人
                                     Player.Location.Offset(0, 5);
                                     Thread.Sleep(10);
                                     UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
-                                    DrawMines();
+                                    //DrawMines();
                                 }
                                 //屏蔽掉，会有很有趣的痕迹效果
                                 //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                 Player.Location = new Point(Player.Location.X, Target);
                                 UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                 PlayerMoveing = false;
+                                DrawMines();
                             });
                         }
                         break;
@@ -132,13 +134,14 @@ namespace 炸弹超人
                                     Player.Location.Offset(-5,0);
                                     Thread.Sleep(10);
                                     UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
-                                    DrawMines();
+                                    //DrawMines();
                                 }
                                 //屏蔽掉，会有很有趣的痕迹效果
                                 //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                 Player.Location = new Point(Target, Player.Location.Y);
                                 UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                 PlayerMoveing = false;
+                                DrawMines();
                             });
                         }
                         break;
@@ -158,13 +161,14 @@ namespace 炸弹超人
                                     Player.Location.Offset(5, 0);
                                     Thread.Sleep(10);
                                     UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
-                                    DrawMines();
+                                    //DrawMines();
                                 }
                                 //屏蔽掉，会有很有趣的痕迹效果
                                 //UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                 Player.Location = new Point(Target, Player.Location.Y);
                                 UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                                 PlayerMoveing = false;
+                                DrawMines();
                             });
                         }
                         break;
@@ -175,16 +179,16 @@ namespace 炸弹超人
                         //按空格键释放炸弹
                         if (Player.PlaceBomb())
                         {
-                            Mines.Add(new Cell(GameMap,Player.TabelLocation));
+                            Mines.Add(new MineModel(GameMap,Player.TabelLocation));
+                            Mines.Last().Blast +=new MineModel.BlastEventHander(BombBlast);
+
                             GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X] = Map.CellType.Mine;
                             UnityGraphics.DrawImage(UnityResource.Mine,new Rectangle(Mines.Last().Location,GameMap.CellSize));
+                            UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
                         }
                         break;
                     }
             }
-
-            //刷新炸弹层
-            DrawMines();
         }
 
         /// <summary>
@@ -199,7 +203,7 @@ namespace 炸弹超人
             Player = new PlayerModel(GameMap,new Point(1, 1));
             UnityGraphics.DrawImage(UnityResource.Player, new Rectangle(Player.Location, GameMap.CellSize));
 
-            Mines = new List<Cell>();
+            Mines = new List<MineModel>();
 
             EnemyList = GameMap.CreateEnemy();
             foreach (Cell Enemy in EnemyList)
@@ -227,6 +231,17 @@ namespace 炸弹超人
         private bool TouchEnemy()
         {
             return (EnemyList.Where(X => new Rectangle(X.Location, GameMap.CellSize).IntersectsWith(new Rectangle(Player.Location, GameMap.CellSize))).Count() > 0);
+        }
+
+        /// <summary>
+        /// 炸弹爆炸事件
+        /// </summary>
+        private void BombBlast(MineModel sender)
+        {
+            Debug.Print(sender.TabelLocation.ToString() + " 炸弹起爆！");
+            UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(sender.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), sender.Location);
+            GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X] = Map.CellType.Ground;
+            Mines.Remove(sender);
         }
     }
 }

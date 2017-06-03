@@ -36,7 +36,7 @@ namespace 炸弹超人
         {
             if (BombCount > 0)
             {
-                BombCount--;
+                //BombCount--;
                 return true;
             }
             else
