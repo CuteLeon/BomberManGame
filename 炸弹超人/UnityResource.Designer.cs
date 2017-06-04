@@ -83,6 +83,16 @@ namespace 炸弹超人 {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap Enemy_Dead {
+            get {
+                object obj = ResourceManager.GetObject("Enemy_Dead", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap GameGround {
             get {
                 object obj = ResourceManager.GetObject("GameGround", resourceCulture);
@@ -123,6 +133,16 @@ namespace 炸弹超人 {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap Player_Lose {
+            get {
+                object obj = ResourceManager.GetObject("Player_Lose", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap Smoke {
             get {
                 object obj = ResourceManager.GetObject("Smoke", resourceCulture);
@@ -146,6 +166,16 @@ namespace 炸弹超人 {
         internal static System.Drawing.Bitmap Wall {
             get {
                 object obj = ResourceManager.GetObject("Wall", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Wall_Broken {
+            get {
+                object obj = ResourceManager.GetObject("Wall_Broken", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

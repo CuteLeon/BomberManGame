@@ -47,10 +47,17 @@ namespace 炸弹超人
         /// </summary>
         private Bitmap EnemyCellImage;
         /// <summary>
+        /// 拉伸后的死亡敌人图像（节省多次拉伸计算资源）
+        /// </summary>
+        private Bitmap EnemyDeadCellImage;
+        /// <summary>
         /// 拉伸后的烟雾图像（节省多次拉伸计算资源）
         /// </summary>
         private Bitmap SmokeCellImage;
-
+        /// <summary>
+        /// 拉伸后的破损墙图像（节省多次拉伸计算资源）
+        /// </summary>
+        private Bitmap WallBrokenCellImage;
 
         public GameForm()
         {
@@ -59,11 +66,13 @@ namespace 炸弹超人
             
             this.SetBounds(0,0,Screen .PrimaryScreen .Bounds .Width ,Screen .PrimaryScreen .Bounds .Height );
             GameMap = new Map(Screen.PrimaryScreen.Bounds.Size);
-            //计算拉伸后的玩家、炸弹、敌人、烟雾图像
+            //计算拉伸后的玩家、炸弹、敌人、烟雾、破损墙图像
             PlayerCellImage = new Bitmap(UnityResource.Player, GameMap.CellSize);
             MineCellImage = new Bitmap(UnityResource.Mine, GameMap.CellSize);
             EnemyCellImage = new Bitmap(UnityResource.Enemy, GameMap.CellSize);
+            EnemyDeadCellImage= new Bitmap(UnityResource.Enemy_Dead, GameMap.CellSize);
             SmokeCellImage = new Bitmap(UnityResource.Smoke, GameMap.CellSize);
+            WallBrokenCellImage = new Bitmap(UnityResource.Wall_Broken, GameMap.CellSize);
         }
 
         private void GameForm_Load(object sender, EventArgs e)
@@ -288,7 +297,7 @@ namespace 炸弹超人
                     if (GameMap.MapCellsClone[LocationInTabel.Y,LocationInTabel.X] == Map.CellType.Wall)
                     {
                         SmokePoints.Add(new Cell(DrawLocation,LocationInTabel));
-                        UnityGraphics.DrawImageUnscaled(SmokeCellImage, DrawLocation);
+                        UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
                         break;
                     }
                     else if (GameMap.MapCellsClone[LocationInTabel.Y,LocationInTabel.X] == Map.CellType.Ground)
@@ -312,7 +321,7 @@ namespace 炸弹超人
                     if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Wall)
                     {
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
-                        UnityGraphics.DrawImageUnscaled(SmokeCellImage, DrawLocation);
+                        UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
                         break;
                     }
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Ground)
@@ -336,7 +345,7 @@ namespace 炸弹超人
                     if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Wall)
                     {
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
-                        UnityGraphics.DrawImageUnscaled(SmokeCellImage, DrawLocation);
+                        UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
                         break;
                     }
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Ground)
@@ -359,7 +368,7 @@ namespace 炸弹超人
                     if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Wall)
                     {
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
-                        UnityGraphics.DrawImageUnscaled(SmokeCellImage, DrawLocation);
+                        UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
                         break;
                     }
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Ground)
@@ -417,35 +426,41 @@ namespace 炸弹超人
         /// <param name="MapGround">填充背景用的Ground副本</param>
         private void ClearSmoke(object SmokePoints,object MapGround)
         {
-            if (((List<Cell>)SmokePoints).FirstOrDefault(X => X.TabelLocation.Equals(Player.TabelLocation)) != null)
-            {
-                Debug.Print("玩家被炸弹炸伤，重新开始游戏！");
-                MessageBox.Show("玩家被炸弹炸伤！游戏结束！");
-                ResetGame();
-            }
-
-            int EnemyIndex = 0;
-            while (EnemyIndex < EnemyList.Count)
-            {
-                if (((List<Cell>)SmokePoints).FirstOrDefault(X => X.TabelLocation.Equals(EnemyList[EnemyIndex].TabelLocation)) != null)
-                {
-                    Debug.Print("敌人 {0} : {1},{2} 被炸伤，退出战场！剩余敌人总数：{3}",EnemyIndex, EnemyList[EnemyIndex].TabelLocation.X, EnemyList[EnemyIndex].TabelLocation.Y,EnemyList.Count-1);
-                    EnemyList.RemoveAt(EnemyIndex);
-                }
-                else
-                    EnemyIndex++;
-            }
-            
-            Thread.Sleep(200);
             using (Graphics UnityGraphics = this.CreateGraphics())
+            {
+                if (((List<Cell>)SmokePoints).FirstOrDefault(X => X.TabelLocation.Equals(Player.TabelLocation)) != null)
+                {
+                    Debug.Print("玩家被炸弹炸伤，重新开始游戏！");
+                    UnityGraphics.DrawImage(UnityResource.Player_Lose,new Rectangle( Player.Location,GameMap.CellSize));
+                    MessageBox.Show("玩家被炸弹炸伤！游戏结束！");
+                    ResetGame();
+                    return;
+                }
+
+                int EnemyIndex = 0;
+                while (EnemyIndex < EnemyList.Count)
+                {
+                    if (((List<Cell>)SmokePoints).FirstOrDefault(X => X.TabelLocation.Equals(EnemyList[EnemyIndex].TabelLocation)) != null)
+                    {
+                        Debug.Print("敌人 {0} : {1},{2} 被炸伤，退出战场！剩余敌人总数：{3}",EnemyIndex, EnemyList[EnemyIndex].TabelLocation.X, EnemyList[EnemyIndex].TabelLocation.Y,EnemyList.Count-1);
+                        UnityGraphics.DrawImageUnscaled(EnemyDeadCellImage,EnemyList[EnemyIndex].Location);
+                        EnemyList.RemoveAt(EnemyIndex);
+                    }
+                    else
+                        EnemyIndex++;
+                }
+            
+                Thread.Sleep(400);
                 foreach (Cell SmokePoint in (List<Cell>)SmokePoints)
                 {
                     //烟雾消散之后才认为Wall被炸成了Ground，防止多个炸弹联动爆炸时会穿透
                     GameMap.MapCellsClone[SmokePoint.TabelLocation.Y, SmokePoint.TabelLocation.X] = Map.CellType.Ground;
-                    new Action(() => {
+                    new Action(() =>
+                    {
                         UnityGraphics.DrawImage(((Bitmap)MapGround).Clone(new Rectangle(SmokePoint.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), SmokePoint.Location);
                     }).Invoke();
                 }
+            }
             GC.Collect();
         }
     }

@@ -124,6 +124,9 @@
   <data name="Enemy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Enemy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Enemy_Dead" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Enemy_Dead.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="GameGround" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\GameGround.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -136,6 +139,9 @@
   <data name="Player" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Player.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Player_Lose" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Player_Lose.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Smoke" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Smoke.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -144,5 +150,8 @@
   </data>
   <data name="Wall" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Wall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Wall_Broken" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Wall_Broken.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
