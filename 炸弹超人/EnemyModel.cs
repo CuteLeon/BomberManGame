@@ -121,7 +121,7 @@ namespace 炸弹超人
                                     }
                                     this.Location.Offset(0, -5);
                                     Patrol(this, LastLocation);
-                                    Thread.Sleep(100);
+                                    Thread.Sleep(75);
                                 }
                                 if (PlaceBombClose) break;
 
@@ -160,7 +160,7 @@ namespace 炸弹超人
                                     }
                                     this.Location.Offset(0, +5);
                                     Patrol(this, LastLocation);
-                                    Thread.Sleep(100);
+                                    Thread.Sleep(75);
                                 }
                                 if (PlaceBombClose) break;
                                 this.Location = new Point(this.Location.X, Target);
@@ -198,7 +198,7 @@ namespace 炸弹超人
                                     }
                                     this.Location.Offset(-5,0);
                                     Patrol(this, LastLocation);
-                                    Thread.Sleep(100);
+                                    Thread.Sleep(75);
                                 }
                                 if (PlaceBombClose) break;
                                 this.Location = new Point(Target, this.Location.Y);
@@ -236,7 +236,7 @@ namespace 炸弹超人
                                     }
                                     this.Location.Offset(+5, 0);
                                     Patrol(this, LastLocation);
-                                    Thread.Sleep(100);
+                                    Thread.Sleep(75);
                                 }
                                 if (PlaceBombClose) break;
                                 this.Location = new Point(Target, this.Location.Y);

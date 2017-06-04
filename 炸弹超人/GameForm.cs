@@ -12,6 +12,7 @@ using System.Windows.Forms;
 
 //todo:奖励 通关门
 //todo:每次移动后不要drawmines()
+//todo:重置时拆除炸弹
 
 namespace 炸弹超人
 {
@@ -483,25 +484,43 @@ namespace 炸弹超人
         private bool CheckBlast(List<Cell> SmokePoints,Graphics UnityGraphics)
         {
             int EnemyIndex = 0;
+            Rectangle TempRectangle;
             while (EnemyIndex < EnemyList.Count)
             {
-                if (((List<Cell>)SmokePoints).FirstOrDefault(X => new Rectangle(X.Location,GameMap.CellSize).IntersectsWith(new Rectangle(EnemyList[EnemyIndex].Location,GameMap.CellSize))) != null)
+                foreach (Cell SmokePoint in SmokePoints)
                 {
-                    Debug.Print("敌人 {0} : {1},{2} 被炸伤，退出战场！剩余敌人总数：{3}", EnemyIndex, EnemyList[EnemyIndex].TabelLocation.X, EnemyList[EnemyIndex].TabelLocation.Y, EnemyList.Count - 1);
-                    lock(EnemyDeadCellImage)
-                        UnityGraphics.DrawImageUnscaled(EnemyDeadCellImage, EnemyList[EnemyIndex].Location);
-                    EnemyList[EnemyIndex].Dispose();//结束敌人的巡逻线程，否则不会释放内存
-                    EnemyList[EnemyIndex].Patrol -= new EnemyModel.PatrolEventHander(EnemyPatrol);
-                    EnemyList.RemoveAt(EnemyIndex);
+                    TempRectangle =new Rectangle(EnemyList[EnemyIndex].Location, GameMap.CellSize);
+                    TempRectangle .Intersect(new Rectangle(SmokePoint.Location, GameMap.CellSize));
+                    if ((double)(TempRectangle.Width * TempRectangle.Height) / (double)(GameMap.CellSize.Width * GameMap.CellSize.Width) > 0.3)
+                    {
+                        lock (EnemyDeadCellImage)
+                            UnityGraphics.DrawImageUnscaled(EnemyDeadCellImage, EnemyList[EnemyIndex].Location);
+                        EnemyList[EnemyIndex].Dispose();//结束敌人的巡逻线程，否则不会释放内存
+                        EnemyList[EnemyIndex].Patrol -= new EnemyModel.PatrolEventHander(EnemyPatrol);
+                        EnemyList.RemoveAt(EnemyIndex);
+                        EnemyIndex--;
+                        break;
+                    }
                 }
-                else
-                    EnemyIndex++;
+                EnemyIndex++;
+
+                //if (((List<Cell>)SmokePoints).FirstOrDefault(X => new Rectangle(X.Location,GameMap.CellSize).IntersectsWith(new Rectangle(EnemyList[EnemyIndex].Location,GameMap.CellSize))) != null)
+                //{
+                //    //Debug.Print("敌人 {0} : {1},{2} 被炸伤，退出战场！剩余敌人总数：{3}", EnemyIndex, EnemyList[EnemyIndex].TabelLocation.X, EnemyList[EnemyIndex].TabelLocation.Y, EnemyList.Count - 1);
+                //    lock(EnemyDeadCellImage)
+                //        UnityGraphics.DrawImageUnscaled(EnemyDeadCellImage, EnemyList[EnemyIndex].Location);
+                //    EnemyList[EnemyIndex].Dispose();//结束敌人的巡逻线程，否则不会释放内存
+                //    EnemyList[EnemyIndex].Patrol -= new EnemyModel.PatrolEventHander(EnemyPatrol);
+                //    EnemyList.RemoveAt(EnemyIndex);
+                //}
+                //else
+                //    EnemyIndex++;
             }
             GC.Collect();
 
             if (((List<Cell>)SmokePoints).FirstOrDefault(X => new Rectangle(X.Location, GameMap.CellSize).IntersectsWith(new Rectangle(Player.Location, GameMap.CellSize))) != null)
             {
-                Debug.Print("玩家被炸弹炸伤，重新开始游戏！");
+                //Debug.Print("玩家被炸弹炸伤，重新开始游戏！");
                 UnityGraphics.DrawImage(UnityResource.Player_Lose, new Rectangle(Player.Location, GameMap.CellSize));
                 MessageBox.Show("玩家被炸弹炸伤！游戏结束！");
                 ResetGame();
