@@ -100,7 +100,6 @@ namespace 炸弹超人
                                         UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                         Player.Location.Offset(0, -5);
                                         UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
-                                        DrawMines();
                                     }
                                     //屏蔽掉，会有很有趣的痕迹效果
                                     UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
@@ -131,7 +130,6 @@ namespace 炸弹超人
                                         UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                         Player.Location.Offset(0, 5);
                                         UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
-                                        //DrawMines();
                                     }
                                     //屏蔽掉，会有很有趣的痕迹效果
                                     UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
@@ -162,7 +160,6 @@ namespace 炸弹超人
                                         UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                         Player.Location.Offset(-5, 0);
                                         UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
-                                        //DrawMines();
                                     }
                                     //屏蔽掉，会有很有趣的痕迹效果
                                     UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
@@ -193,7 +190,6 @@ namespace 炸弹超人
                                         UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                         Player.Location.Offset(5, 0);
                                         UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
-                                        //DrawMines();
                                     }
                                     //屏蔽掉，会有很有趣的痕迹效果
                                     UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
@@ -382,7 +378,10 @@ namespace 炸弹超人
                         }
                     }
 
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(ClearSmoke), SmokePoints);
+                    //ThreadPool.QueueUserWorkItem(new WaitCallback(ClearSmoke), SmokePoints);
+                    
+                    //多线程允许传入任意多个参数
+                    new Thread(delegate () { ClearSmoke(SmokePoints, GameMap.Ground.Clone());}).Start();
 
                     Mines.Remove(sender);
                 }
@@ -390,12 +389,13 @@ namespace 炸弹超人
             catch (Exception ex) { }
         }
 
-
+        //此标识表示方法被弃用
+        [Obsolete]
         /// <summary>
-        /// 炸弹爆炸之后，延时消散爆炸烟雾
+        /// 炸弹爆炸之后，延时消散爆炸烟雾（会发生资源抢占异常！）
         /// </summary>
         /// <param name="Smoke">烟雾坐标数组</param>
-        private void ClearSmoke(object SmokePoints)
+        private  void ClearSmoke(object SmokePoints)
         {
             Thread.Sleep(300);
             using (Graphics UnityGraphics = this.CreateGraphics())
@@ -404,10 +404,36 @@ namespace 炸弹超人
                     GameMap.MapCellsClone[SmokePoint.TabelLocation.Y, SmokePoint.TabelLocation.X] = Map.CellType.Ground;
                     try
                     {
-                        UnityGraphics.DrawImage(MineModel.Ground.Clone(new Rectangle(SmokePoint.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), SmokePoint.Location);
+                        new Action(() => {
+                            UnityGraphics.DrawImage(GameMap.Ground.Clone(new Rectangle(SmokePoint.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), SmokePoint.Location);
+                        }).Invoke();
                     }
                     catch (Exception ex) { }
                 }
+        }
+
+        /// <summary>
+        /// 炸弹爆炸之后，延时消散爆炸烟雾
+        /// </summary>
+        /// <param name="Smoke">烟雾坐标数组</param>
+        /// <param name="MapGround">填充背景用的Ground副本</param>
+        private void ClearSmoke(object SmokePoints,object MapGround)
+        {
+            Thread.Sleep(200);
+            using (Graphics UnityGraphics = this.CreateGraphics())
+                foreach (Cell SmokePoint in (List<Cell>)SmokePoints)
+                {
+                    //烟雾消散之后才认为Wall被炸成了Ground，防止多个炸弹联动爆炸时会穿透
+                    GameMap.MapCellsClone[SmokePoint.TabelLocation.Y, SmokePoint.TabelLocation.X] = Map.CellType.Ground;
+                    try
+                    {
+                        new Action(() => {
+                            UnityGraphics.DrawImage(((Bitmap)MapGround).Clone(new Rectangle(SmokePoint.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), SmokePoint.Location);
+                        }).Invoke();
+                    }
+                    catch (Exception ex) { }
+                }
+            GC.Collect();
         }
     }
 }
