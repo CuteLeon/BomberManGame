@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 //todo:奖励 通关门
-//todo:每次移动后不要drawmines()
 
 namespace 炸弹超人
 {
@@ -294,17 +293,32 @@ namespace 炸弹超人
                 //Debug.Print("敌人 {0},{1} 触发巡逻事件！" ,Sender.TabelLocation.X,Sender.TabelLocation.Y);
                 UnityGraphics.DrawImage(Sender.MapGround.Clone(new Rectangle(EnemyLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), EnemyLocation);
                 UnityGraphics.DrawImageUnscaled(Sender.EnemyCellImage, Sender.Location);
-                
+
                 //玩家与敌人碰撞，受伤
-                if (new Rectangle(Sender.Location, GameMap.CellSize).IntersectsWith(new Rectangle(Player.Location, GameMap.CellSize)))
+                Rectangle TempRectangle;
+                TempRectangle = new Rectangle(Sender.Location, GameMap.CellSize);
+                TempRectangle.Intersect(new Rectangle (Player.Location,GameMap.CellSize));
+                if ((double)(TempRectangle.Width * TempRectangle.Height) / (double)(GameMap.CellSize.Width * GameMap.CellSize.Width) > 0.3)
                 {
                     //必须回到this.Invoke()线程，才可以正常重置游戏！
-                    this.Invoke(new Action(()=> {
-                        MessageBox.Show(this,"玩家被敌人撞伤！游戏结束！");
+                    this.Invoke(new Action(() =>
+                    {
+                        StopGame();
+
+                        MessageBox.Show(this, "玩家被敌人撞伤！游戏结束！");
                         ResetGame();
                     }));
                     return;
                 }
+                //if (new Rectangle(Sender.Location, GameMap.CellSize).IntersectsWith(new Rectangle(Player.Location, GameMap.CellSize)))
+                //{
+                //    //必须回到this.Invoke()线程，才可以正常重置游戏！
+                //    this.Invoke(new Action(()=> {
+                //        MessageBox.Show(this,"玩家被敌人撞伤！游戏结束！");
+                //        ResetGame();
+                //    }));
+                //    return;
+                //}
             }
             GC.Collect();
         }
@@ -486,7 +500,7 @@ namespace 炸弹超人
         /// 检查炸弹爆炸时的伤害
         /// </summary>
         /// <returns>是否炸到玩家</returns>
-        private bool CheckBlast(List<Cell> SmokePoints,Graphics UnityGraphics)
+        private bool CheckBlast(List<Cell> SmokePoints, Graphics UnityGraphics)
         {
             int EnemyIndex = 0;
             Rectangle TempRectangle;
@@ -494,8 +508,8 @@ namespace 炸弹超人
             {
                 foreach (Cell SmokePoint in SmokePoints)
                 {
-                    TempRectangle =new Rectangle(EnemyList[EnemyIndex].Location, GameMap.CellSize);
-                    TempRectangle .Intersect(new Rectangle(SmokePoint.Location, GameMap.CellSize));
+                    TempRectangle = new Rectangle(EnemyList[EnemyIndex].Location, GameMap.CellSize);
+                    TempRectangle.Intersect(new Rectangle(SmokePoint.Location, GameMap.CellSize));
                     if ((double)(TempRectangle.Width * TempRectangle.Height) / (double)(GameMap.CellSize.Width * GameMap.CellSize.Width) > 0.3)
                     {
                         lock (EnemyDeadCellImage)
@@ -523,16 +537,33 @@ namespace 炸弹超人
             }
             GC.Collect();
 
-            if (((List<Cell>)SmokePoints).FirstOrDefault(X => new Rectangle(X.Location, GameMap.CellSize).IntersectsWith(new Rectangle(Player.Location, GameMap.CellSize))) != null)
+            foreach (Cell SmokePoint in SmokePoints)
             {
-                //Debug.Print("玩家被炸弹炸伤，重新开始游戏！");
-                UnityGraphics.DrawImage(UnityResource.Player_Lose, new Rectangle(Player.Location, GameMap.CellSize));
-                MessageBox.Show("玩家被炸弹炸伤！游戏结束！");
-                ResetGame();
-                return true;
+                TempRectangle = new Rectangle(SmokePoint.Location, GameMap.CellSize);
+                TempRectangle.Intersect(new Rectangle(Player.Location, GameMap.CellSize));
+                if ((double)(TempRectangle.Width * TempRectangle.Height) / (double)(GameMap.CellSize.Width * GameMap.CellSize.Width) > 0.3)
+                {
+                    //Debug.Print("玩家被炸弹炸伤，重新开始游戏！");
+                    UnityGraphics.DrawImage(UnityResource.Player_Lose, new Rectangle(Player.Location, GameMap.CellSize));
+                    StopGame();
+                    MessageBox.Show(this,"玩家被炸弹炸伤！游戏结束！");
+                    ResetGame();
+                    return true;
+                }
             }
-            else
-                return false;
+            return false;
+
+            //if (((List<Cell>)SmokePoints).FirstOrDefault(X => new Rectangle(X.Location, GameMap.CellSize).IntersectsWith(new Rectangle(Player.Location, GameMap.CellSize))) != null)
+            //{
+            //    //Debug.Print("玩家被炸弹炸伤，重新开始游戏！");
+            //    UnityGraphics.DrawImage(UnityResource.Player_Lose, new Rectangle(Player.Location, GameMap.CellSize));
+            //    StopGame();
+            //    MessageBox.Show("玩家被炸弹炸伤！游戏结束！");
+            //    ResetGame();
+            //    return true;
+            //}
+            //else
+            //    return false;
         }
 
         private void GameForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -549,6 +580,24 @@ namespace 炸弹超人
                 Mine.Blast -= new MineModel.BlastEventHander(BombBlast);
             }
             MineList.Clear();
+        }
+
+        /// <summary>
+        /// 停止游戏 (拆除炸弹 静止敌人)
+        /// </summary>
+        private void StopGame()
+        {
+            foreach (EnemyModel Enemy_In in EnemyList)
+            {
+                Enemy_In.Dispose();
+                Enemy_In.Patrol -= new EnemyModel.PatrolEventHander(EnemyPatrol);
+            }
+
+            foreach (MineModel Mine in MineList)
+            {
+                Mine.Dispose();
+                Mine.Blast -= new MineModel.BlastEventHander(BombBlast);
+            }
         }
     }
 }
