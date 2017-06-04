@@ -75,6 +75,8 @@ namespace 炸弹超人
             
             this.SetBounds(0,0,Screen .PrimaryScreen .Bounds .Width ,Screen .PrimaryScreen .Bounds .Height );
             GameMap = new Map(Screen.PrimaryScreen.Bounds.Size);
+            Player = new PlayerModel(GameMap, new Point(1, 1));
+
             //计算拉伸后的图像
             PlayerCellImage = new Bitmap(UnityResource.Player, GameMap.CellSize);
             MineCellImage = new Bitmap(UnityResource.Mine, GameMap.CellSize);
@@ -275,7 +277,9 @@ namespace 炸弹超人
                 UnityGraphics.DrawImageUnscaled(GameMap.Ground, Point.Empty);
                 UnityGraphics.DrawImageUnscaled(GameMap.DrawWalls(), Point.Empty);
 
-                Player = new PlayerModel(GameMap,new Point(1, 1));
+                Player.Location=PlayerModel.DefaultLocation.Location;
+                Player.TabelLocation = PlayerModel.DefaultLocation.TabelLocation;
+
                 UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
 
                 MineList = new List<MineModel>();
@@ -566,7 +570,7 @@ namespace 炸弹超人
                     }).Invoke();
                 }
             }
-            DrawMinesAndGiftAndDoor();
+            //DrawMinesAndGiftAndDoor();
             GC.Collect();
         }
 
