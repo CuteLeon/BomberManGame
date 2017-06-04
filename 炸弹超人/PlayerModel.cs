@@ -12,7 +12,7 @@ namespace 炸弹超人
         /// <summary>
         /// 爆炸杀伤半径（默认为 1）
         /// </summary>
-        public byte BlastRadius = 3;
+        public byte BlastRadius = 2;
         /// <summary>
         /// 允许同时放置的炸弹总数（默认为 1）
         /// </summary>
@@ -36,14 +36,6 @@ namespace 炸弹超人
         /// <param name="tabelLocation"></param>
         public PlayerModel(Map GameMap, Point tabelLocation):base(GameMap,tabelLocation){
             Ground = (Bitmap)GameMap.Ground.Clone();
-        }
-
-        /// <summary>
-        /// 角色移动
-        /// </summary>
-        public void Move()
-        {
-
         }
 
         /// <summary>

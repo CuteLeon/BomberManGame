@@ -17,7 +17,7 @@ namespace 炸弹超人
         /// <summary>
         /// 敌人列表
         /// </summary>
-        List<EnemyModel> EnemyList;
+        List<EnemyModel> EnemyList=new List<EnemyModel>();
         /// <summary>
         /// 游戏地图对象
         /// </summary>
@@ -43,10 +43,6 @@ namespace 炸弹超人
         /// </summary>
         private Bitmap MineCellImage;
         /// <summary>
-        /// 拉伸后的敌人图像（节省多次拉伸计算资源）
-        /// </summary>
-        private Bitmap EnemyCellImage;
-        /// <summary>
         /// 拉伸后的死亡敌人图像（节省多次拉伸计算资源）
         /// </summary>
         private Bitmap EnemyDeadCellImage;
@@ -69,7 +65,6 @@ namespace 炸弹超人
             //计算拉伸后的玩家、炸弹、敌人、烟雾、破损墙图像
             PlayerCellImage = new Bitmap(UnityResource.Player, GameMap.CellSize);
             MineCellImage = new Bitmap(UnityResource.Mine, GameMap.CellSize);
-            EnemyCellImage = new Bitmap(UnityResource.Enemy, GameMap.CellSize);
             EnemyDeadCellImage= new Bitmap(UnityResource.Enemy_Dead, GameMap.CellSize);
             SmokeCellImage = new Bitmap(UnityResource.Smoke, GameMap.CellSize);
             WallBrokenCellImage = new Bitmap(UnityResource.Wall_Broken, GameMap.CellSize);
@@ -219,12 +214,12 @@ namespace 炸弹超人
                         {
                             if (Mines.FirstOrDefault(X => X.TabelLocation.Equals(Player.TabelLocation)) == null)
                             {
+                                GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X] = Map.CellType.Mine;
                                 Player.PlaceBomb();
                                 Mines.Add(new MineModel(GameMap, Player.TabelLocation));
                                 Mines.Last().Blast += new MineModel.BlastEventHander(BombBlast);
                                 using (Graphics UnityGraphics = this.CreateGraphics())
                                 {
-                                    GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X] = Map.CellType.Mine;
                                     UnityGraphics.DrawImageUnscaled(MineCellImage,Mines.Last().Location);
                                     UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
                                 }
@@ -240,6 +235,12 @@ namespace 炸弹超人
         /// </summary>
         private void ResetGame()
         {
+            foreach (EnemyModel Enemy in EnemyList)
+            {
+                Enemy.Dispose();
+                Enemy.Patrol -=new EnemyModel.PatrolEventHander ( EnemyPatrol);
+            }
+
             using (Graphics UnityGraphics = this.CreateGraphics())
             {
                 GameMap.ResetMap();
@@ -251,9 +252,12 @@ namespace 炸弹超人
 
                 Mines = new List<MineModel>();
 
-                EnemyList = GameMap.CreateEnemy();
-                foreach (Cell Enemy in EnemyList)
-                    UnityGraphics.DrawImageUnscaled(EnemyCellImage, Enemy.Location);
+                EnemyList = GameMap.CreateEnemy(5);
+                foreach (EnemyModel Enemy in EnemyList)
+                {
+                    UnityGraphics.DrawImageUnscaled(Enemy.EnemyCellImage, Enemy.Location);
+                    Enemy.Patrol += new EnemyModel.PatrolEventHander(EnemyPatrol);
+                }
             }
 
             this.KeyDown -= new System.Windows.Forms.KeyEventHandler(this.GameForm_KeyDown);
@@ -272,12 +276,19 @@ namespace 炸弹超人
         }
 
         /// <summary>
-        /// 检查是否触碰到敌人
+        /// 敌人触发巡逻事件
         /// </summary>
-        /// <returns></returns>
-        private bool TouchEnemy()
+        private void EnemyPatrol(EnemyModel Sender,Point EnemyLocation)
         {
-            return (EnemyList.Where(X => new Rectangle(X.Location, GameMap.CellSize).IntersectsWith(new Rectangle(Player.Location, GameMap.CellSize))).Count() > 0);
+            using (Graphics UnityGraphics = this.CreateGraphics())
+            {
+                //Debug.Print("敌人 {0},{1} 触发巡逻事件！" ,Sender.TabelLocation.X,Sender.TabelLocation.Y);
+                UnityGraphics.DrawImage(Sender.MapGround.Clone(new Rectangle(EnemyLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), EnemyLocation);
+                UnityGraphics.DrawImageUnscaled(Sender.EnemyCellImage, Sender.Location);
+            }
+            GC.Collect();
+
+            //return (EnemyList.Where(X => new Rectangle(X.Location, GameMap.CellSize).IntersectsWith(new Rectangle(Player.Location, GameMap.CellSize))).Count() > 0);
         }
 
         /// <summary>
@@ -465,12 +476,16 @@ namespace 炸弹超人
                 if (((List<Cell>)SmokePoints).FirstOrDefault(X => X.TabelLocation.Equals(EnemyList[EnemyIndex].TabelLocation)) != null)
                 {
                     Debug.Print("敌人 {0} : {1},{2} 被炸伤，退出战场！剩余敌人总数：{3}", EnemyIndex, EnemyList[EnemyIndex].TabelLocation.X, EnemyList[EnemyIndex].TabelLocation.Y, EnemyList.Count - 1);
-                    UnityGraphics.DrawImageUnscaled(EnemyDeadCellImage, EnemyList[EnemyIndex].Location);
+                    lock(EnemyDeadCellImage)
+                        UnityGraphics.DrawImageUnscaled(EnemyDeadCellImage, EnemyList[EnemyIndex].Location);
+                    EnemyList[EnemyIndex].Dispose();//结束敌人的巡逻线程，否则不会释放内存
+                    EnemyList[EnemyIndex].Patrol -= new EnemyModel.PatrolEventHander(EnemyPatrol);
                     EnemyList.RemoveAt(EnemyIndex);
                 }
                 else
                     EnemyIndex++;
             }
+            GC.Collect();
 
             if (((List<Cell>)SmokePoints).FirstOrDefault(X => X.TabelLocation.Equals(Player.TabelLocation)) != null)
             {
@@ -482,6 +497,17 @@ namespace 炸弹超人
             }
             else
                 return false;
+        }
+
+        private void GameForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //需要卸载敌人线程，否则会出错
+            foreach (EnemyModel Enemy in EnemyList)
+            {
+                Enemy.Dispose();
+                Enemy.Patrol -= new EnemyModel.PatrolEventHander(EnemyPatrol);
+            }
+            EnemyList.Clear();
         }
     }
 }

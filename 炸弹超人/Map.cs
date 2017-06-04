@@ -217,11 +217,11 @@ namespace 炸弹超人
         /// <summary>
         /// 创建敌人
         /// </summary>
+        /// <param name="EnemyCount">敌人数量</param>
         /// <returns>敌人列表坐标</returns>
-        public List<EnemyModel> CreateEnemy()
+        public List<EnemyModel> CreateEnemy(int EnemyCount)
         {
             List<EnemyModel> EnemyList = new List<EnemyModel>();
-            int EnemyCount = 5;
             int Index;
             while (EnemyCount > 0)
             {

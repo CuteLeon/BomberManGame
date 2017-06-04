@@ -29,7 +29,7 @@ namespace 炸弹超人
         public MineModel(Map GameMap, Point tabelLocation):base(GameMap,tabelLocation)
         {
             System.Threading.ThreadPool.QueueUserWorkItem(delegate {
-                //炸弹延缓5秒爆炸
+                //炸弹延缓爆炸
                 System.Threading.Thread.Sleep(3000);
                 if (Blasted) return;
                 Blast(this);
