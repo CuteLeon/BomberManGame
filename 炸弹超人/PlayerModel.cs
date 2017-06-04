@@ -47,18 +47,20 @@ namespace 炸弹超人
         }
 
         /// <summary>
-        /// 放置炸弹
+        /// 检查是否允许放置炸弹
         /// </summary>
         /// <returns>是否允许放置</returns>
-        public bool PlaceBomb()
+        public bool CanPlaceBomb()
         {
-            if (BombCount > 0)
-            {
-                BombCount--;
-                return true;
-            }
-            else
-                return false;
+            return (BombCount > 0);
+        }
+
+        /// <summary>
+        /// 放置炸弹
+        /// </summary>
+        public void PlaceBomb()
+        {
+            BombCount--;
         }
     }
 }

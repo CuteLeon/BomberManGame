@@ -215,15 +215,19 @@ namespace 炸弹超人
                 case Keys.Space:
                     {
                         //按空格键释放炸弹
-                        if (Player.PlaceBomb())
+                        if (Player.CanPlaceBomb())
                         {
-                            Mines.Add(new MineModel(GameMap, Player.TabelLocation));
-                            Mines.Last().Blast += new MineModel.BlastEventHander(BombBlast);
-                            using (Graphics UnityGraphics = this.CreateGraphics())
+                            if (Mines.FirstOrDefault(X => X.TabelLocation.Equals(Player.TabelLocation)) == null)
                             {
-                                GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X] = Map.CellType.Mine;
-                                UnityGraphics.DrawImageUnscaled(MineCellImage,Mines.Last().Location);
-                                UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
+                                Player.PlaceBomb();
+                                Mines.Add(new MineModel(GameMap, Player.TabelLocation));
+                                Mines.Last().Blast += new MineModel.BlastEventHander(BombBlast);
+                                using (Graphics UnityGraphics = this.CreateGraphics())
+                                {
+                                    GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X] = Map.CellType.Mine;
+                                    UnityGraphics.DrawImageUnscaled(MineCellImage,Mines.Last().Location);
+                                    UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
+                                }
                             }
                         }
                         break;
@@ -387,13 +391,13 @@ namespace 炸弹超人
 
                 //ThreadPool.QueueUserWorkItem(new WaitCallback(ClearSmoke), SmokePoints);
 
-                new Action(() => {
+                //new Action(() => {
                     //使用 lock 块锁定共享资源，可以避免资源抢占！相见恨晚！！！
                     lock (GameMap.Ground)
                     {
                         new Thread(delegate () { ClearSmoke(SmokePoints, GameMap.Ground.Clone());}).Start();
                     }
-                }).Invoke();
+                //}).Invoke();
                 //多线程允许传入任意多个参数
 
                 Mines.Remove(sender);
