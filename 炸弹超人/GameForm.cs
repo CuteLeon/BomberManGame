@@ -89,6 +89,7 @@ namespace 炸弹超人
 
         private void GameForm_Load(object sender, EventArgs e)
         {
+            this.Icon = UnityResource.BomberMan;
             this.BackgroundImage = GameMap.Ground;
             GC.Collect();
         }
