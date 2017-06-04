@@ -306,12 +306,9 @@ namespace 炸弹超人
         /// </summary>
         public void Dispose()
         {
-            try
-            {
-                PatrolThread.Abort();
-                PatrolThread = null;
-            }
-            catch (Exception ex) { }
+            if (PatrolThread == null) return;
+            PatrolThread.Abort();
+            PatrolThread = null;
         }
     }
 }

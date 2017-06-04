@@ -12,7 +12,6 @@ using System.Windows.Forms;
 
 //todo:奖励 通关门
 //todo:每次移动后不要drawmines()
-//todo:完成撞击检测
 
 namespace 炸弹超人
 {
@@ -241,11 +240,10 @@ namespace 炸弹超人
         {
             foreach (EnemyModel Enemy in EnemyList)
             {
-                Debug.Print("释放");
                 Enemy.Dispose();
                 //Enemy.Patrol -=new EnemyModel.PatrolEventHander ( EnemyPatrol);
             }
-            Debug.Print("重置");
+            
             using (Graphics UnityGraphics = this.CreateGraphics())
             {
                 GameMap.ResetMap();
@@ -294,8 +292,11 @@ namespace 炸弹超人
                 //玩家与敌人碰撞，受伤
                 if (new Rectangle(Sender.Location, GameMap.CellSize).IntersectsWith(new Rectangle(Player.Location, GameMap.CellSize)))
                 {
-                    MessageBox.Show(this,"玩家被敌人撞伤！游戏结束！");
-                    ResetGame();
+                    //必须回到this.Invoke()线程，才可以正常重置游戏！
+                    this.Invoke(new Action(()=> {
+                        MessageBox.Show(this,"玩家被敌人撞伤！游戏结束！");
+                        ResetGame();
+                    }));
                     return;
                 }
             }
