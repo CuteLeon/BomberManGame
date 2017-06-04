@@ -16,7 +16,7 @@ namespace 炸弹超人
         /// <summary>
         /// 允许同时放置的炸弹总数（默认为 1）
         /// </summary>
-        public Byte BombCount=3;
+        public byte BombCount=3;
         /// <summary>
         /// 游戏地图克隆，防止清除轨迹时资源被抢占
         /// </summary>

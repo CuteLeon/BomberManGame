@@ -11,11 +11,22 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 //todo:奖励 通关门
+//todo:爆炸后敌人在爆炸范围外的图像无法擦除
 
 namespace 炸弹超人
 {
     public partial class GameForm : Form
     {
+        /// <summary>
+        /// 奖励物品坐标
+        /// </summary>
+        private Cell GiftLocation;
+        private Bitmap GiftCellImage;
+        /// <summary>
+        /// 通关门坐标
+        /// </summary>
+        private Cell DoorLocation;
+        private Bitmap DoorCellImage;
         /// <summary>
         /// 敌人列表
         /// </summary>
@@ -64,12 +75,14 @@ namespace 炸弹超人
             
             this.SetBounds(0,0,Screen .PrimaryScreen .Bounds .Width ,Screen .PrimaryScreen .Bounds .Height );
             GameMap = new Map(Screen.PrimaryScreen.Bounds.Size);
-            //计算拉伸后的玩家、炸弹、敌人、烟雾、破损墙图像
+            //计算拉伸后的图像
             PlayerCellImage = new Bitmap(UnityResource.Player, GameMap.CellSize);
             MineCellImage = new Bitmap(UnityResource.Mine, GameMap.CellSize);
             EnemyDeadCellImage= new Bitmap(UnityResource.Enemy_Dead, GameMap.CellSize);
             SmokeCellImage = new Bitmap(UnityResource.Smoke, GameMap.CellSize);
             WallBrokenCellImage = new Bitmap(UnityResource.Wall_Broken, GameMap.CellSize);
+            GiftCellImage = new Bitmap(UnityResource.Gift, GameMap.CellSize);
+            DoorCellImage = new Bitmap(UnityResource.Door,GameMap.CellSize);
         }
 
         private void GameForm_Load(object sender, EventArgs e)
@@ -113,7 +126,8 @@ namespace 炸弹超人
                                     UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
                                 }
                                 PlayerMoveing = false;
-                                DrawMines();
+                                DrawMinesAndGiftAndDoor();
+                                CheackPlayerArriveGiftOrDoor();
                             });
                         }
                         break;
@@ -143,7 +157,8 @@ namespace 炸弹超人
                                     UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
                                 }
                                 PlayerMoveing = false;
-                                DrawMines();
+                                DrawMinesAndGiftAndDoor();
+                                CheackPlayerArriveGiftOrDoor();
                             });
                         }
                         break;
@@ -173,7 +188,8 @@ namespace 炸弹超人
                                     UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
                                 }
                                 PlayerMoveing = false;
-                                DrawMines();
+                                DrawMinesAndGiftAndDoor();
+                                CheackPlayerArriveGiftOrDoor();
                             });
                         }
                         break;
@@ -203,7 +219,8 @@ namespace 炸弹超人
                                     UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
                                 }
                                 PlayerMoveing = false;
-                                DrawMines();
+                                DrawMinesAndGiftAndDoor();
+                                CheackPlayerArriveGiftOrDoor();
                             });
                         }
                         break;
@@ -237,6 +254,9 @@ namespace 炸弹超人
         /// </summary>
         private void ResetGame()
         {
+            GiftLocation = null;
+            DoorLocation = null;
+
             foreach (EnemyModel Enemy in EnemyList)
             {
                 Enemy.Dispose();
@@ -275,12 +295,43 @@ namespace 炸弹超人
         /// <summary>
         /// 绘制炸弹图层
         /// </summary>
-        private void DrawMines()
+        private void DrawMinesAndGiftAndDoor()
         {
             using (Graphics UnityGraphics = this.CreateGraphics())
+            {
+                //绘制炸弹
                 foreach (Cell Mine in MineList)
                     UnityGraphics.DrawImageUnscaled(MineCellImage, Mine.Location);
+
+                //绘制奖励和通关门
+                if (GiftLocation!=null) UnityGraphics.DrawImageUnscaled(GiftCellImage,GiftLocation.Location);
+                if(DoorLocation!=null) UnityGraphics.DrawImageUnscaled(DoorCellImage, DoorLocation.Location);
+            }
+
             GC.Collect();
+        }
+
+        /// <summary>
+        /// 检查玩家到达奖励或者通关门
+        /// </summary>
+        private void CheackPlayerArriveGiftOrDoor()
+        {
+            if (GiftLocation != null) if (Player.TabelLocation.Equals(GiftLocation.TabelLocation))
+                {
+                    //获得奖励！
+                    Player.BlastRadius += 1;
+                    GiftLocation = null;
+                }
+            if (DoorLocation != null) if (Player.TabelLocation.Equals(DoorLocation.TabelLocation))
+                {
+                    //到达通关门
+                    if (EnemyList.Count == 0)
+                    {
+                        //游戏胜利！！！
+                        MessageBox.Show(this,"胜利！游戏结束！");
+                        ResetGame();
+                    }
+                }
         }
 
         /// <summary>
@@ -343,6 +394,8 @@ namespace 炸弹超人
                     LocationInTabel = new Point(sender.TabelLocation.X, sender.TabelLocation.Y - Radius);
                     if (GameMap.MapCellsClone[LocationInTabel.Y,LocationInTabel.X] == Map.CellType.Wall)
                     {
+                        CheckGiftAndDoorUnderWall(LocationInTabel);
+
                         SmokePoints.Add(new Cell(DrawLocation,LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
                         break;
@@ -367,6 +420,8 @@ namespace 炸弹超人
                     LocationInTabel = new Point(sender.TabelLocation.X,sender.TabelLocation.Y + Radius);
                     if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Wall)
                     {
+                        CheckGiftAndDoorUnderWall(LocationInTabel);
+
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
                         break;
@@ -391,6 +446,8 @@ namespace 炸弹超人
                     LocationInTabel = new Point(sender.TabelLocation.X - Radius, sender.TabelLocation.Y);
                     if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Wall)
                     {
+                        CheckGiftAndDoorUnderWall(LocationInTabel);
+
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
                         break;
@@ -414,6 +471,8 @@ namespace 炸弹超人
                     LocationInTabel = new Point(sender.TabelLocation.X + Radius, sender.TabelLocation.Y);
                     if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Wall)
                     {
+                        CheckGiftAndDoorUnderWall(LocationInTabel);
+
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
                         break;
@@ -465,6 +524,20 @@ namespace 炸弹超人
                     }).Invoke();
                 }
         }
+        
+        /// <summary>
+        /// 检查墙下面是否是奖励或通关门
+        /// </summary>
+        private void CheckGiftAndDoorUnderWall(Point LocationInTabel)
+        {
+            if (GiftLocation == null)
+                if (LocationInTabel.Equals(GameMap.GiftLocation.TabelLocation))
+                    GiftLocation = GameMap.GiftLocation;
+
+            if (DoorLocation == null)
+                if (LocationInTabel.Equals(GameMap.DoorLocation.TabelLocation))
+                    DoorLocation = GameMap.DoorLocation;
+        }
 
         /// <summary>
         /// 炸弹爆炸之后，延时消散爆炸烟雾
@@ -493,6 +566,7 @@ namespace 炸弹超人
                     }).Invoke();
                 }
             }
+            DrawMinesAndGiftAndDoor();
             GC.Collect();
         }
 
