@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+//todo:奖励 通关门
+
 namespace 炸弹超人
 {
     public partial class GameForm : Form
@@ -473,7 +475,7 @@ namespace 炸弹超人
             int EnemyIndex = 0;
             while (EnemyIndex < EnemyList.Count)
             {
-                if (((List<Cell>)SmokePoints).FirstOrDefault(X => X.TabelLocation.Equals(EnemyList[EnemyIndex].TabelLocation)) != null)
+                if (((List<Cell>)SmokePoints).FirstOrDefault(X => new Rectangle(X.Location,GameMap.CellSize).IntersectsWith(new Rectangle(EnemyList[EnemyIndex].Location,GameMap.CellSize))) != null)
                 {
                     Debug.Print("敌人 {0} : {1},{2} 被炸伤，退出战场！剩余敌人总数：{3}", EnemyIndex, EnemyList[EnemyIndex].TabelLocation.X, EnemyList[EnemyIndex].TabelLocation.Y, EnemyList.Count - 1);
                     lock(EnemyDeadCellImage)
