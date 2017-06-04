@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 //todo:奖励 通关门
+//todo:每次移动后不要drawmines()
+//todo:完成撞击检测
 
 namespace 炸弹超人
 {
@@ -239,10 +241,11 @@ namespace 炸弹超人
         {
             foreach (EnemyModel Enemy in EnemyList)
             {
+                Debug.Print("释放");
                 Enemy.Dispose();
-                Enemy.Patrol -=new EnemyModel.PatrolEventHander ( EnemyPatrol);
+                //Enemy.Patrol -=new EnemyModel.PatrolEventHander ( EnemyPatrol);
             }
-
+            Debug.Print("重置");
             using (Graphics UnityGraphics = this.CreateGraphics())
             {
                 GameMap.ResetMap();
@@ -287,10 +290,16 @@ namespace 炸弹超人
                 //Debug.Print("敌人 {0},{1} 触发巡逻事件！" ,Sender.TabelLocation.X,Sender.TabelLocation.Y);
                 UnityGraphics.DrawImage(Sender.MapGround.Clone(new Rectangle(EnemyLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), EnemyLocation);
                 UnityGraphics.DrawImageUnscaled(Sender.EnemyCellImage, Sender.Location);
+                
+                //玩家与敌人碰撞，受伤
+                if (new Rectangle(Sender.Location, GameMap.CellSize).IntersectsWith(new Rectangle(Player.Location, GameMap.CellSize)))
+                {
+                    MessageBox.Show(this,"玩家被敌人撞伤！游戏结束！");
+                    ResetGame();
+                    return;
+                }
             }
             GC.Collect();
-
-            //return (EnemyList.Where(X => new Rectangle(X.Location, GameMap.CellSize).IntersectsWith(new Rectangle(Player.Location, GameMap.CellSize))).Count() > 0);
         }
 
         /// <summary>
@@ -489,7 +498,7 @@ namespace 炸弹超人
             }
             GC.Collect();
 
-            if (((List<Cell>)SmokePoints).FirstOrDefault(X => X.TabelLocation.Equals(Player.TabelLocation)) != null)
+            if (((List<Cell>)SmokePoints).FirstOrDefault(X => new Rectangle(X.Location, GameMap.CellSize).IntersectsWith(new Rectangle(Player.Location, GameMap.CellSize))) != null)
             {
                 Debug.Print("玩家被炸弹炸伤，重新开始游戏！");
                 UnityGraphics.DrawImage(UnityResource.Player_Lose, new Rectangle(Player.Location, GameMap.CellSize));

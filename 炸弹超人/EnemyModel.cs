@@ -112,7 +112,6 @@ namespace 炸弹超人
                                 int Target = this.TabelLocation.Y * GameMap.CellSize.Height + GameMap.PaddingSize.Height;
                                 while (this.Location.Y > Target + 5)
                                 {
-                                    Thread.Sleep(100);
                                     //检查玩家是不是紧跟着放置了炸弹
                                     if (GameMap.MapCellsClone[TabelLocation.Y, TabelLocation.X] == Map.CellType.Mine)
                                     {
@@ -122,6 +121,7 @@ namespace 炸弹超人
                                     }
                                     this.Location.Offset(0, -5);
                                     Patrol(this, LastLocation);
+                                    Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
 
@@ -151,7 +151,6 @@ namespace 炸弹超人
                                 int Target = this.TabelLocation.Y * GameMap.CellSize.Height + GameMap.PaddingSize.Height;
                                 while (this.Location.Y < Target - 5)
                                 {
-                                    Thread.Sleep(100);
                                     //检查玩家是不是紧跟着放置了炸弹
                                     if (GameMap.MapCellsClone[TabelLocation.Y, TabelLocation.X] == Map.CellType.Mine)
                                     {
@@ -161,6 +160,7 @@ namespace 炸弹超人
                                     }
                                     this.Location.Offset(0, +5);
                                     Patrol(this, LastLocation);
+                                    Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
                                 this.Location = new Point(this.Location.X, Target);
@@ -189,7 +189,6 @@ namespace 炸弹超人
                                 int Target = this.TabelLocation.X * GameMap.CellSize.Width + GameMap.PaddingSize.Width;
                                 while (this.Location.X > Target + 5)
                                 {
-                                    Thread.Sleep(100);
                                     //检查玩家是不是紧跟着放置了炸弹
                                     if (GameMap.MapCellsClone[TabelLocation.Y, TabelLocation.X] == Map.CellType.Mine)
                                     {
@@ -199,6 +198,7 @@ namespace 炸弹超人
                                     }
                                     this.Location.Offset(-5,0);
                                     Patrol(this, LastLocation);
+                                    Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
                                 this.Location = new Point(Target, this.Location.Y);
@@ -227,7 +227,6 @@ namespace 炸弹超人
                                 int Target = this.TabelLocation.X * GameMap.CellSize.Width + GameMap.PaddingSize.Width;
                                 while (this.Location.X < Target - 5)
                                 {
-                                    Thread.Sleep(100);
                                     //检查玩家是不是紧跟着放置了炸弹
                                     if (GameMap.MapCellsClone[TabelLocation.Y, TabelLocation.X] == Map.CellType.Mine)
                                     {
@@ -237,6 +236,7 @@ namespace 炸弹超人
                                     }
                                     this.Location.Offset(+5, 0);
                                     Patrol(this, LastLocation);
+                                    Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
                                 this.Location = new Point(Target, this.Location.Y);
@@ -306,8 +306,12 @@ namespace 炸弹超人
         /// </summary>
         public void Dispose()
         {
-            PatrolThread.Abort();
-            PatrolThread = null;
+            try
+            {
+                PatrolThread.Abort();
+                PatrolThread = null;
+            }
+            catch (Exception ex) { }
         }
     }
 }
