@@ -18,11 +18,26 @@ namespace 炸弹超人
         /// </summary>
         public Byte BombCount=3;
         /// <summary>
+        /// 游戏地图克隆，防止清除轨迹时资源被抢占
+        /// </summary>
+        public Bitmap Ground;
+
+        /// <summary>
+        /// 被隐藏的构造函数（禁止访问）
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="tabelLocation"></param>
+        private PlayerModel(Point location, Point tabelLocation) : base(location,tabelLocation) { }
+
+        /// <summary>
         /// 继承自Cell类的构造函数
         /// </summary>
         /// <param name="GameMap"></param>
         /// <param name="tabelLocation"></param>
-        public PlayerModel(Map GameMap, Point tabelLocation):base(GameMap,tabelLocation){}
+        public PlayerModel(Map GameMap, Point tabelLocation):base(GameMap,tabelLocation){
+            Ground = (Bitmap)GameMap.Ground.Clone();
+        }
+
         /// <summary>
         /// 角色移动
         /// </summary>

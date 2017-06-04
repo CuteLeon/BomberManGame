@@ -18,6 +18,10 @@ namespace 炸弹超人
         /// </summary>
         public event BlastEventHander Blast;
         /// <summary>
+        /// 游戏地图克隆，防止资源被抢占
+        /// </summary>
+        public static Bitmap Ground;
+        /// <summary>
         /// 是否已经起爆
         /// </summary>
         private bool Blasted;
@@ -28,6 +32,7 @@ namespace 炸弹超人
         /// <param name="tabelLocation"></param>
         public MineModel(Map GameMap, Point tabelLocation):base(GameMap,tabelLocation)
         {
+            if (Ground == null) Ground =(Bitmap) GameMap.Ground.Clone();
             System.Threading.ThreadPool.QueueUserWorkItem(delegate {
                 //炸弹延缓5秒爆炸
                 System.Threading.Thread.Sleep(3000);
@@ -38,13 +43,22 @@ namespace 炸弹超人
         }
 
         /// <summary>
+        /// 被隐藏的构造函数（禁止访问）
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="tabelLocation"></param>
+        private MineModel(Point location, Point tabelLocation) : base(location,tabelLocation) { }
+
+        /// <summary>
         /// 立即起爆！
         /// </summary>
-        public void BlastNow()
+        /// <returns>是否允许立即起爆</returns>
+        public bool BlastNow()
         {
-            if (Blasted) return;
+            if (Blasted) return false;
             Blast(this);
             Blasted = true;
+            return true;
         }
 
     }
