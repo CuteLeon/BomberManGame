@@ -419,10 +419,29 @@ namespace 炸弹超人
         /// <param name="MapGround">填充背景用的Ground副本</param>
         private void ClearSmoke(object SmokePoints,object MapGround)
         {
+            if (((List<Cell>)SmokePoints).FirstOrDefault(X => X.TabelLocation.Equals(Player.TabelLocation)) != null)
+            {
+                MessageBox.Show("玩家被炸弹炸伤！游戏结束！");
+                ResetGame();
+            }
+
+            int EnemyIndex = 0;
+            while (EnemyIndex < EnemyList.Count)
+            {
+                if (((List<Cell>)SmokePoints).FirstOrDefault(X => X.TabelLocation.Equals(EnemyList[EnemyIndex].TabelLocation)) != null)
+                {
+                    Debug.Print("敌人 {0},{1} 被炸伤，退出战场！剩余敌人总数：{2}", EnemyList[EnemyIndex].TabelLocation.X, EnemyList[EnemyIndex].TabelLocation.Y,EnemyList.Count.ToString());
+                    EnemyList.RemoveAt(EnemyIndex);
+                }
+                else
+                    EnemyIndex++;
+            }
+            
             Thread.Sleep(200);
             using (Graphics UnityGraphics = this.CreateGraphics())
                 foreach (Cell SmokePoint in (List<Cell>)SmokePoints)
                 {
+                    //if ()
                     //烟雾消散之后才认为Wall被炸成了Ground，防止多个炸弹联动爆炸时会穿透
                     GameMap.MapCellsClone[SmokePoint.TabelLocation.Y, SmokePoint.TabelLocation.X] = Map.CellType.Ground;
                     try
