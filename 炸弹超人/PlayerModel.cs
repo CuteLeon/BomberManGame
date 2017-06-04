@@ -10,6 +10,10 @@ namespace 炸弹超人
     class PlayerModel:Cell
     {
         /// <summary>
+        /// 默认炸弹总数
+        /// </summary>
+        private const byte DefaultBombCount = 3;
+        /// <summary>
         /// 默认坐标
         /// </summary>
         public static Cell DefaultLocation;
@@ -20,7 +24,7 @@ namespace 炸弹超人
         /// <summary>
         /// 允许同时放置的炸弹总数
         /// </summary>
-        public byte BombCount=3;
+        public byte BombCount= DefaultBombCount;
         /// <summary>
         /// 游戏地图克隆，防止清除轨迹时资源被抢占
         /// </summary>
@@ -61,6 +65,17 @@ namespace 炸弹超人
         public void PlaceBomb()
         {
             BombCount--;
+        }
+
+        /// <summary>
+        /// 初始化玩家
+        /// </summary>
+        public void ResetPlayer()
+        {
+            BombCount = DefaultBombCount;
+            Location = PlayerModel.DefaultLocation.Location;
+            TabelLocation = PlayerModel.DefaultLocation.TabelLocation;
+            System.Diagnostics.Debug.Print(DefaultLocation.Location.ToString());
         }
     }
 }

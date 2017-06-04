@@ -228,7 +228,7 @@ namespace 炸弹超人
                         }
                         break;
                     }
-
+                case Keys.Enter:
                 case Keys.Space:
                     {
                         //按空格键释放炸弹
@@ -274,12 +274,11 @@ namespace 炸弹超人
 
             using (Graphics UnityGraphics = this.CreateGraphics())
             {
+                Player.ResetPlayer();
+
                 GameMap.ResetMap();
                 UnityGraphics.DrawImageUnscaled(GameMap.Ground, Point.Empty);
                 UnityGraphics.DrawImageUnscaled(GameMap.DrawWalls(), Point.Empty);
-
-                Player.Location=PlayerModel.DefaultLocation.Location;
-                Player.TabelLocation = PlayerModel.DefaultLocation.TabelLocation;
 
                 UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
 
