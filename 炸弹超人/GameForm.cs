@@ -12,7 +12,6 @@ using System.Windows.Forms;
 
 //todo:奖励 通关门
 //todo:每次移动后不要drawmines()
-//todo:重置时拆除炸弹
 
 namespace 炸弹超人
 {
@@ -33,7 +32,7 @@ namespace 炸弹超人
         /// <summary>
         /// 已经放置的炸弹列表
         /// </summary>
-        private List<MineModel> Mines;
+        private List<MineModel> MineList = new List<MineModel>();
         /// <summary>
         /// 玩家角色正在移动线程中
         /// </summary>
@@ -216,15 +215,15 @@ namespace 炸弹超人
                         //按空格键释放炸弹
                         if (Player.CanPlaceBomb())
                         {
-                            if (Mines.FirstOrDefault(X => X.TabelLocation.Equals(Player.TabelLocation)) == null)
+                            if (MineList.FirstOrDefault(X => X.TabelLocation.Equals(Player.TabelLocation)) == null)
                             {
                                 GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X] = Map.CellType.Mine;
                                 Player.PlaceBomb();
-                                Mines.Add(new MineModel(GameMap, Player.TabelLocation));
-                                Mines.Last().Blast += new MineModel.BlastEventHander(BombBlast);
+                                MineList.Add(new MineModel(GameMap, Player.TabelLocation));
+                                MineList.Last().Blast += new MineModel.BlastEventHander(BombBlast);
                                 using (Graphics UnityGraphics = this.CreateGraphics())
                                 {
-                                    UnityGraphics.DrawImageUnscaled(MineCellImage,Mines.Last().Location);
+                                    UnityGraphics.DrawImageUnscaled(MineCellImage,MineList.Last().Location);
                                     UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
                                 }
                             }
@@ -242,9 +241,15 @@ namespace 炸弹超人
             foreach (EnemyModel Enemy in EnemyList)
             {
                 Enemy.Dispose();
-                //Enemy.Patrol -=new EnemyModel.PatrolEventHander ( EnemyPatrol);
+                Enemy.Patrol -=new EnemyModel.PatrolEventHander ( EnemyPatrol);
             }
-            
+
+            foreach (MineModel Mine in MineList)
+            {
+                Mine.Dispose();
+                Mine.Blast -= new MineModel.BlastEventHander(BombBlast);
+            }
+
             using (Graphics UnityGraphics = this.CreateGraphics())
             {
                 GameMap.ResetMap();
@@ -254,7 +259,7 @@ namespace 炸弹超人
                 Player = new PlayerModel(GameMap,new Point(1, 1));
                 UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
 
-                Mines = new List<MineModel>();
+                MineList = new List<MineModel>();
 
                 EnemyList = GameMap.CreateEnemy(5);
                 foreach (EnemyModel Enemy in EnemyList)
@@ -274,7 +279,7 @@ namespace 炸弹超人
         private void DrawMines()
         {
             using (Graphics UnityGraphics = this.CreateGraphics())
-                foreach (Cell Mine in Mines)
+                foreach (Cell Mine in MineList)
                     UnityGraphics.DrawImageUnscaled(MineCellImage, Mine.Location);
             GC.Collect();
         }
@@ -337,7 +342,7 @@ namespace 炸弹超人
                         break;
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Mine)
                     {
-                        Mines.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
+                        MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
                         break;
                     }
                 }
@@ -361,7 +366,7 @@ namespace 炸弹超人
                         break;
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Mine)
                     {
-                        Mines.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
+                        MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
                         break;
                     }
                 }
@@ -385,7 +390,7 @@ namespace 炸弹超人
                         break;
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Mine)
                     {
-                        Mines.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
+                        MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
                         break;
                     }
                 }
@@ -408,7 +413,7 @@ namespace 炸弹超人
                         break;
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Mine)
                     {
-                        Mines.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
+                        MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
                         break;
                     }
                 }
@@ -424,7 +429,7 @@ namespace 炸弹超人
                 //}).Invoke();
                 //多线程允许传入任意多个参数
 
-                Mines.Remove(sender);
+                MineList.Remove(sender);
             }
         }
 
@@ -532,13 +537,18 @@ namespace 炸弹超人
 
         private void GameForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //需要卸载敌人线程，否则会出错
             foreach (EnemyModel Enemy in EnemyList)
             {
                 Enemy.Dispose();
                 Enemy.Patrol -= new EnemyModel.PatrolEventHander(EnemyPatrol);
             }
             EnemyList.Clear();
+            foreach (MineModel Mine in MineList)
+            {
+                Mine.Dispose();
+                Mine.Blast -= new MineModel.BlastEventHander(BombBlast);
+            }
+            MineList.Clear();
         }
     }
 }

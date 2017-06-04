@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace 炸弹超人
 {
-    class MineModel:Cell
+    class MineModel:Cell,IDisposable
     {
+        /// <summary>
+        /// 延时起爆线程
+        /// </summary>
+        Thread BlastThread;
         /// <summary>
         /// 爆炸事件委托
         /// </summary>
@@ -30,10 +35,11 @@ namespace 炸弹超人
         {
             System.Threading.ThreadPool.QueueUserWorkItem(delegate {
                 //炸弹延缓爆炸
-                System.Threading.Thread.Sleep(3000);
-                if (Blasted) return;
-                Blast(this);
-                Blasted = true;
+                BlastThread = new Thread(delegate () {
+                    Thread.Sleep(3000);
+                    BlastNow();
+                });
+                BlastThread.Start();
             });
         }
 
@@ -56,5 +62,14 @@ namespace 炸弹超人
             return true;
         }
 
+        /// <summary>
+        /// 默认析构函数
+        /// </summary>
+        public void Dispose()
+        {
+            if (BlastThread == null) return;
+            BlastThread.Abort();
+            BlastThread = null;
+        }
     }
 }
