@@ -130,7 +130,7 @@ namespace 炸弹超人
                                 }
                                 PlayerMoveing = false;
                                 DrawMinesAndGiftAndDoor();
-                                CheackPlayerArriveGiftOrDoor();
+                                CheckPlayerArriveGiftOrDoor();
                             });
                         }
                         break;
@@ -161,7 +161,7 @@ namespace 炸弹超人
                                 }
                                 PlayerMoveing = false;
                                 DrawMinesAndGiftAndDoor();
-                                CheackPlayerArriveGiftOrDoor();
+                                CheckPlayerArriveGiftOrDoor();
                             });
                         }
                         break;
@@ -192,7 +192,7 @@ namespace 炸弹超人
                                 }
                                 PlayerMoveing = false;
                                 DrawMinesAndGiftAndDoor();
-                                CheackPlayerArriveGiftOrDoor();
+                                CheckPlayerArriveGiftOrDoor();
                             });
                         }
                         break;
@@ -223,7 +223,7 @@ namespace 炸弹超人
                                 }
                                 PlayerMoveing = false;
                                 DrawMinesAndGiftAndDoor();
-                                CheackPlayerArriveGiftOrDoor();
+                                CheckPlayerArriveGiftOrDoor();
                             });
                         }
                         break;
@@ -318,12 +318,14 @@ namespace 炸弹超人
         /// <summary>
         /// 检查玩家到达奖励或者通关门
         /// </summary>
-        private void CheackPlayerArriveGiftOrDoor()
+        private void CheckPlayerArriveGiftOrDoor()
         {
             if (GiftLocation != null) if (Player.TabelLocation.Equals(GiftLocation.TabelLocation))
                 {
                     //获得奖励！
-                    Player.BlastRadius += 1;
+                    Player.BlastRadius ++;
+                    Player.BombLeftCount ++;
+                    Player.DefaultBombCount++;
                     GiftLocation = null;
                 }
             if (DoorLocation != null) if (Player.TabelLocation.Equals(DoorLocation.TabelLocation))
@@ -386,7 +388,7 @@ namespace 炸弹超人
             using (Graphics UnityGraphics = this.CreateGraphics())
             {
                 List<Cell> SmokePoints = new List<Cell>();
-                Player.BombCount++;
+                Player.BombLeftCount++;
                 SmokePoints.Add(new Cell(sender.Location,sender.TabelLocation));
                 GameMap.MapCellsClone[sender.TabelLocation.Y, sender.TabelLocation.X] = Map.CellType.Ground;
                 UnityGraphics.DrawImageUnscaled(SmokeCellImage, sender.Location);

@@ -12,7 +12,7 @@ namespace 炸弹超人
         /// <summary>
         /// 默认炸弹总数
         /// </summary>
-        private const byte DefaultBombCount = 3;
+        public byte DefaultBombCount = 3;
         /// <summary>
         /// 默认坐标
         /// </summary>
@@ -24,7 +24,7 @@ namespace 炸弹超人
         /// <summary>
         /// 允许同时放置的炸弹总数
         /// </summary>
-        public byte BombCount= DefaultBombCount;
+        public byte BombLeftCount;
         /// <summary>
         /// 游戏地图克隆，防止清除轨迹时资源被抢占
         /// </summary>
@@ -44,10 +44,8 @@ namespace 炸弹超人
         /// <param name="tabelLocation"></param>
         public PlayerModel(Map GameMap, Point tabelLocation):base(GameMap,tabelLocation){
             Ground = (Bitmap)GameMap.Ground.Clone();
-            DefaultLocation = new Cell(
-                this.Location,
-                tabelLocation
-            );
+            DefaultLocation = new Cell(this.Location,tabelLocation);
+            BombLeftCount = DefaultBombCount;
         }
 
         /// <summary>
@@ -56,7 +54,7 @@ namespace 炸弹超人
         /// <returns>是否允许放置</returns>
         public bool CanPlaceBomb()
         {
-            return (BombCount > 0);
+            return (BombLeftCount > 0);
         }
 
         /// <summary>
@@ -64,7 +62,7 @@ namespace 炸弹超人
         /// </summary>
         public void PlaceBomb()
         {
-            BombCount--;
+            BombLeftCount--;
         }
 
         /// <summary>
@@ -72,7 +70,7 @@ namespace 炸弹超人
         /// </summary>
         public void ResetPlayer()
         {
-            BombCount = DefaultBombCount;
+            BombLeftCount = DefaultBombCount;
             Location = PlayerModel.DefaultLocation.Location;
             TabelLocation = PlayerModel.DefaultLocation.TabelLocation;
             System.Diagnostics.Debug.Print(DefaultLocation.Location.ToString());
