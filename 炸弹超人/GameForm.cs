@@ -428,29 +428,14 @@ namespace 炸弹超人
         {
             using (Graphics UnityGraphics = this.CreateGraphics())
             {
-                if (((List<Cell>)SmokePoints).FirstOrDefault(X => X.TabelLocation.Equals(Player.TabelLocation)) != null)
-                {
-                    Debug.Print("玩家被炸弹炸伤，重新开始游戏！");
-                    UnityGraphics.DrawImage(UnityResource.Player_Lose,new Rectangle( Player.Location,GameMap.CellSize));
-                    MessageBox.Show("玩家被炸弹炸伤！游戏结束！");
-                    ResetGame();
-                    return;
-                }
-
-                int EnemyIndex = 0;
-                while (EnemyIndex < EnemyList.Count)
-                {
-                    if (((List<Cell>)SmokePoints).FirstOrDefault(X => X.TabelLocation.Equals(EnemyList[EnemyIndex].TabelLocation)) != null)
-                    {
-                        Debug.Print("敌人 {0} : {1},{2} 被炸伤，退出战场！剩余敌人总数：{3}",EnemyIndex, EnemyList[EnemyIndex].TabelLocation.X, EnemyList[EnemyIndex].TabelLocation.Y,EnemyList.Count-1);
-                        UnityGraphics.DrawImageUnscaled(EnemyDeadCellImage,EnemyList[EnemyIndex].Location);
-                        EnemyList.RemoveAt(EnemyIndex);
-                    }
-                    else
-                        EnemyIndex++;
-                }
+                //起爆时检查伤害
+                if (CheckBlast((List<Cell>)SmokePoints, UnityGraphics)) return;
             
-                Thread.Sleep(400);
+                Thread.Sleep(300);
+
+                //硝烟散去时检查伤害
+                if (CheckBlast((List<Cell>)SmokePoints, UnityGraphics)) return;
+
                 foreach (Cell SmokePoint in (List<Cell>)SmokePoints)
                 {
                     //烟雾消散之后才认为Wall被炸成了Ground，防止多个炸弹联动爆炸时会穿透
@@ -462,6 +447,37 @@ namespace 炸弹超人
                 }
             }
             GC.Collect();
+        }
+
+        /// <summary>
+        /// 检查炸弹爆炸时的伤害
+        /// </summary>
+        /// <returns>是否炸到玩家</returns>
+        private bool CheckBlast(List<Cell> SmokePoints,Graphics UnityGraphics)
+        {
+            int EnemyIndex = 0;
+            while (EnemyIndex < EnemyList.Count)
+            {
+                if (((List<Cell>)SmokePoints).FirstOrDefault(X => X.TabelLocation.Equals(EnemyList[EnemyIndex].TabelLocation)) != null)
+                {
+                    Debug.Print("敌人 {0} : {1},{2} 被炸伤，退出战场！剩余敌人总数：{3}", EnemyIndex, EnemyList[EnemyIndex].TabelLocation.X, EnemyList[EnemyIndex].TabelLocation.Y, EnemyList.Count - 1);
+                    UnityGraphics.DrawImageUnscaled(EnemyDeadCellImage, EnemyList[EnemyIndex].Location);
+                    EnemyList.RemoveAt(EnemyIndex);
+                }
+                else
+                    EnemyIndex++;
+            }
+
+            if (((List<Cell>)SmokePoints).FirstOrDefault(X => X.TabelLocation.Equals(Player.TabelLocation)) != null)
+            {
+                Debug.Print("玩家被炸弹炸伤，重新开始游戏！");
+                UnityGraphics.DrawImage(UnityResource.Player_Lose, new Rectangle(Player.Location, GameMap.CellSize));
+                MessageBox.Show("玩家被炸弹炸伤！游戏结束！");
+                ResetGame();
+                return true;
+            }
+            else
+                return false;
         }
     }
 }
