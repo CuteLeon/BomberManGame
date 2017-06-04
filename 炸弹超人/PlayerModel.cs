@@ -23,7 +23,6 @@ namespace 炸弹超人
         /// <param name="GameMap"></param>
         /// <param name="tabelLocation"></param>
         public PlayerModel(Map GameMap, Point tabelLocation):base(GameMap,tabelLocation){}
-
         /// <summary>
         /// 角色移动
         /// </summary>
