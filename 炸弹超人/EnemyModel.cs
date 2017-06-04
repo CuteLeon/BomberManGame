@@ -44,9 +44,9 @@ namespace 炸弹超人
             Right=4
         }
         /// <summary>
-        /// 上次巡逻方向
+        /// 下次巡逻方向
         /// </summary>
-        private PatrolDirection LastDirection=PatrolDirection.None;
+        private PatrolDirection NextDirection=PatrolDirection.None;
         /// <summary>
         /// 敌人所在游戏地图
         /// </summary>
@@ -84,21 +84,24 @@ namespace 炸弹超人
             //记录移动之前的坐标，作为事件参数
             //Debug.Print("敌人开始巡逻！");
             Point LastLocation;
+            //记录玩家是否紧跟着敌人防止了炸弹
+            bool PlaceBombClose;
             while (true)
             {
                 LastLocation = this.Location;
+                PlaceBombClose = false;
 
                 //Debug.Print(DateTime.Now.ToString() + " 巡逻方向：" + LastDirection.ToString());
-                switch (LastDirection)
+                switch (NextDirection)
                 {
                     case PatrolDirection.None:
                         {
                             //四周都是墙壁，无法巡逻时等待
                             System.Threading.Thread.Sleep(UnityRandom.Next(500));
-                            if (CanGo(PatrolDirection.Up)) { LastDirection = PatrolDirection.Up; break; }
-                            if (CanGo(PatrolDirection.Down)) { LastDirection = PatrolDirection.Down; break; }
-                            if (CanGo(PatrolDirection.Left)) { LastDirection = PatrolDirection.Left; break; }
-                            if (CanGo(PatrolDirection.Right)) { LastDirection = PatrolDirection.Right; break; }
+                            if (CanGo(PatrolDirection.Up)) { NextDirection = PatrolDirection.Up; break; }
+                            if (CanGo(PatrolDirection.Down)) { NextDirection = PatrolDirection.Down; break; }
+                            if (CanGo(PatrolDirection.Left)) { NextDirection = PatrolDirection.Left; break; }
+                            if (CanGo(PatrolDirection.Right)) { NextDirection = PatrolDirection.Right; break; }
                             break;
                         }
                     case PatrolDirection.Up:
@@ -110,9 +113,18 @@ namespace 炸弹超人
                                 while (this.Location.Y > Target + 5)
                                 {
                                     Thread.Sleep(100);
+                                    //检查玩家是不是紧跟着放置了炸弹
+                                    if (GameMap.MapCellsClone[TabelLocation.Y, TabelLocation.X] == Map.CellType.Mine)
+                                    {
+                                        NextDirection = PatrolDirection.Down;
+                                        PlaceBombClose = true;
+                                        break;
+                                    }
                                     this.Location.Offset(0, -5);
                                     Patrol(this, LastLocation);
                                 }
+                                if (PlaceBombClose) break;
+
                                 this.Location = new Point(this.Location.X, Target);
                                 Patrol(this, LastLocation);
 
@@ -120,14 +132,14 @@ namespace 炸弹超人
                                 if (UnityRandom.NextDouble() > 0.9)
                                 {
                                     //Debug.Print(DateTime.Now.ToString() + " 巡逻时随机转向!");
-                                    LastDirection = GetRandomDirection();
+                                    NextDirection = GetRandomDirection();
                                 }
                             }
                             else
                             {
                                 //移动撞墙时转向
                                 //Debug.Print(DateTime.Now.ToString() + " 撞墙，强制转向！");
-                                LastDirection = GetRandomDirection();
+                                NextDirection = GetRandomDirection();
                             }
                             break;
                         }
@@ -140,9 +152,17 @@ namespace 炸弹超人
                                 while (this.Location.Y < Target - 5)
                                 {
                                     Thread.Sleep(100);
+                                    //检查玩家是不是紧跟着放置了炸弹
+                                    if (GameMap.MapCellsClone[TabelLocation.Y, TabelLocation.X] == Map.CellType.Mine)
+                                    {
+                                        NextDirection = PatrolDirection.Up;
+                                        PlaceBombClose = true;
+                                        break;
+                                    }
                                     this.Location.Offset(0, +5);
                                     Patrol(this, LastLocation);
                                 }
+                                if (PlaceBombClose) break;
                                 this.Location = new Point(this.Location.X, Target);
                                 Patrol(this, LastLocation);
 
@@ -150,14 +170,14 @@ namespace 炸弹超人
                                 if (UnityRandom.NextDouble() > 0.9)
                                 {
                                     //Debug.Print(DateTime.Now.ToString() + " 巡逻时随机转向!");
-                                    LastDirection = GetRandomDirection();
+                                    NextDirection = GetRandomDirection();
                                 }
                             }
                             else
                             {
                                 //移动撞墙时转向
                                 //Debug.Print(DateTime.Now.ToString() + " 撞墙，强制转向！");
-                                LastDirection = GetRandomDirection();
+                                NextDirection = GetRandomDirection();
                             }
                             break;
                         }
@@ -170,9 +190,17 @@ namespace 炸弹超人
                                 while (this.Location.X > Target + 5)
                                 {
                                     Thread.Sleep(100);
+                                    //检查玩家是不是紧跟着放置了炸弹
+                                    if (GameMap.MapCellsClone[TabelLocation.Y, TabelLocation.X] == Map.CellType.Mine)
+                                    {
+                                        NextDirection = PatrolDirection.Right;
+                                        PlaceBombClose = true;
+                                        break;
+                                    }
                                     this.Location.Offset(-5,0);
                                     Patrol(this, LastLocation);
                                 }
+                                if (PlaceBombClose) break;
                                 this.Location = new Point(Target, this.Location.Y);
                                 Patrol(this, LastLocation);
 
@@ -180,14 +208,14 @@ namespace 炸弹超人
                                 if (UnityRandom.NextDouble() > 0.9)
                                 {
                                     //Debug.Print(DateTime.Now.ToString() + " 巡逻时随机转向!");
-                                    LastDirection = GetRandomDirection();
+                                    NextDirection = GetRandomDirection();
                                 }
                             }
                             else
                             {
                                 //移动撞墙时转向
                                 //Debug.Print(DateTime.Now.ToString() + " 撞墙，强制转向！");
-                                LastDirection = GetRandomDirection();
+                                NextDirection = GetRandomDirection();
                             }
                             break;
                         }
@@ -200,9 +228,17 @@ namespace 炸弹超人
                                 while (this.Location.X < Target - 5)
                                 {
                                     Thread.Sleep(100);
+                                    //检查玩家是不是紧跟着放置了炸弹
+                                    if (GameMap.MapCellsClone[TabelLocation.Y, TabelLocation.X] == Map.CellType.Mine)
+                                    {
+                                        NextDirection = PatrolDirection.Left;
+                                        PlaceBombClose = true;
+                                        break;
+                                    }
                                     this.Location.Offset(+5, 0);
                                     Patrol(this, LastLocation);
                                 }
+                                if (PlaceBombClose) break;
                                 this.Location = new Point(Target, this.Location.Y);
                                 Patrol(this, LastLocation);
 
@@ -210,14 +246,14 @@ namespace 炸弹超人
                                 if (UnityRandom.NextDouble() > 0.9)
                                 {
                                     //Debug.Print(DateTime.Now.ToString() + " 巡逻时随机转向!");
-                                    LastDirection = GetRandomDirection();
+                                    NextDirection = GetRandomDirection();
                                 }
                             }
                             else
                             {
                                 //移动撞墙时转向
                                 //Debug.Print(DateTime.Now.ToString() + " 撞墙，强制转向！");
-                                LastDirection = GetRandomDirection();
+                                NextDirection = GetRandomDirection();
                             }
                             break;
                         }
