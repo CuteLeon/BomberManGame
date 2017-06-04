@@ -88,7 +88,6 @@ namespace 炸弹超人
             bool PlaceBombClose;
             while (true)
             {
-                LastLocation = this.Location;
                 PlaceBombClose = false;
 
                 //Debug.Print(DateTime.Now.ToString() + " 巡逻方向：" + LastDirection.ToString());
@@ -119,12 +118,13 @@ namespace 炸弹超人
                                         PlaceBombClose = true;
                                         break;
                                     }
+                                    LastLocation = this.Location;
                                     this.Location.Offset(0, -5);
                                     Patrol(this, LastLocation);
-                                    Thread.Sleep(75);
+                                    Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
-
+                                LastLocation = this.Location;
                                 this.Location = new Point(this.Location.X, Target);
                                 Patrol(this, LastLocation);
 
@@ -158,11 +158,13 @@ namespace 炸弹超人
                                         PlaceBombClose = true;
                                         break;
                                     }
+                                    LastLocation = this.Location;
                                     this.Location.Offset(0, +5);
                                     Patrol(this, LastLocation);
-                                    Thread.Sleep(75);
+                                    Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
+                                LastLocation = this.Location;
                                 this.Location = new Point(this.Location.X, Target);
                                 Patrol(this, LastLocation);
 
@@ -196,11 +198,13 @@ namespace 炸弹超人
                                         PlaceBombClose = true;
                                         break;
                                     }
+                                    LastLocation = this.Location;
                                     this.Location.Offset(-5,0);
                                     Patrol(this, LastLocation);
-                                    Thread.Sleep(75);
+                                    Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
+                                LastLocation = this.Location;
                                 this.Location = new Point(Target, this.Location.Y);
                                 Patrol(this, LastLocation);
 
@@ -234,11 +238,13 @@ namespace 炸弹超人
                                         PlaceBombClose = true;
                                         break;
                                     }
+                                    LastLocation = this.Location;
                                     this.Location.Offset(+5, 0);
                                     Patrol(this, LastLocation);
-                                    Thread.Sleep(75);
+                                    Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
+                                LastLocation = this.Location;
                                 this.Location = new Point(Target, this.Location.Y);
                                 Patrol(this, LastLocation);
 
