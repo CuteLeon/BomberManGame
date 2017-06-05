@@ -10,6 +10,10 @@ namespace 炸弹超人
     class PlayerModel:Cell
     {
         /// <summary>
+        /// 记录玩家所在地图对象
+        /// </summary>
+        Map GameMap;
+        /// <summary>
         /// 默认炸弹总数
         /// </summary>
         public byte DefaultBombCount = 3;
@@ -40,12 +44,16 @@ namespace 炸弹超人
         /// <summary>
         /// 继承自Cell类的构造函数
         /// </summary>
-        /// <param name="GameMap"></param>
+        /// <param name="gameMap"></param>
         /// <param name="tabelLocation"></param>
-        public PlayerModel(Map GameMap, Point tabelLocation):base(GameMap,tabelLocation){
-            Ground = (Bitmap)GameMap.Ground.Clone();
+        public PlayerModel(Map gameMap, Point tabelLocation):base(gameMap,tabelLocation){
+            GameMap = gameMap;
+            Ground = (Bitmap)gameMap.Ground.Clone();
             DefaultLocation = new Cell(this.Location,tabelLocation);
             BombLeftCount = DefaultBombCount;
+
+            //最大火力作弊！
+            BlastRadius =20;
         }
 
         /// <summary>

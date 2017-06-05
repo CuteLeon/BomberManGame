@@ -23,11 +23,11 @@ namespace 炸弹超人
         /// <summary>
         /// 固定的游戏地图元素表格宽度
         /// </summary>
-        private const int TabelWidth = 23;
+        public const int TabelWidth = 23;
         /// <summary>
         /// 固定的游戏地图元素表格高度
         /// </summary>
-        private const int TabelHeight = 13;
+        public const int TabelHeight = 13;
         /// <summary>
         /// 地图元素类型二维数组
         /// </summary>

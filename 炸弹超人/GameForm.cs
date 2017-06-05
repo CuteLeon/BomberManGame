@@ -404,7 +404,8 @@ namespace 炸弹超人
 
                         SmokePoints.Add(new Cell(DrawLocation,LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
-                        break;
+                        //伤害穿透作弊！
+                        //break;
                     }
                     else if (GameMap.MapCellsClone[LocationInTabel.Y,LocationInTabel.X] == Map.CellType.Ground)
                     {
@@ -416,7 +417,8 @@ namespace 炸弹超人
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Mine)
                     {
                         MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
-                        break;
+                        //伤害穿透作弊！
+                        //break;
                     }
                 }
 
@@ -430,7 +432,8 @@ namespace 炸弹超人
 
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
-                        break;
+                        //伤害穿透作弊！
+                        //break;
                     }
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Ground)
                     {
@@ -442,7 +445,8 @@ namespace 炸弹超人
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Mine)
                     {
                         MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
-                        break;
+                        //伤害穿透作弊！
+                        //break;
                     }
                 }
 
@@ -456,7 +460,8 @@ namespace 炸弹超人
 
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
-                        break;
+                        //伤害穿透作弊！
+                        //break;
                     }
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Ground)
                     {
@@ -468,7 +473,8 @@ namespace 炸弹超人
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Mine)
                     {
                         MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
-                        break;
+                        //伤害穿透作弊！
+                        //break;
                     }
                 }
                 for (int Radius = 1; Radius <= Player.BlastRadius; Radius++)
@@ -481,7 +487,8 @@ namespace 炸弹超人
 
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
-                        break;
+                        //伤害穿透作弊！
+                        //break;
                     }
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Ground)
                     {
@@ -493,7 +500,8 @@ namespace 炸弹超人
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Mine)
                     {
                         MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
-                        break;
+                        //伤害穿透作弊！
+                        //break;
                     }
                 }
 
