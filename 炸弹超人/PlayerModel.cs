@@ -51,9 +51,6 @@ namespace 炸弹超人
             Ground = (Bitmap)gameMap.Ground.Clone();
             DefaultLocation = new Cell(this.Location,tabelLocation);
             BombLeftCount = DefaultBombCount;
-
-            //最大火力作弊！
-            BlastRadius =20;
         }
 
         /// <summary>

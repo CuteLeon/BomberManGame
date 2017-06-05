@@ -83,7 +83,7 @@ namespace 炸弹超人
         {
             //记录移动之前的坐标，作为事件参数
             //Debug.Print("敌人开始巡逻！");
-            Point LastLocation;
+            Point LastLocation=this.Location;
             //记录玩家是否紧跟着敌人防止了炸弹
             bool PlaceBombClose;
             while (true)
@@ -120,13 +120,13 @@ namespace 炸弹超人
                                     }
                                     LastLocation = this.Location;
                                     this.Location.Offset(0, -5);
-                                    if (this!=null) Patrol(this, LastLocation);
+                                    Patrol(this, LastLocation);
                                     Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
                                 LastLocation = this.Location;
                                 this.Location = new Point(this.Location.X, Target);
-                                if (this!=null) Patrol(this, LastLocation);
+                                Patrol(this, LastLocation);
 
                                 //正常移动过程中有很小概率转向
                                 if (UnityRandom.NextDouble() > 0.9)
@@ -160,13 +160,13 @@ namespace 炸弹超人
                                     }
                                     LastLocation = this.Location;
                                     this.Location.Offset(0, +5);
-                                    if (this!=null) Patrol(this, LastLocation);
+                                    Patrol(this, LastLocation);
                                     Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
                                 LastLocation = this.Location;
                                 this.Location = new Point(this.Location.X, Target);
-                                if (this!=null) Patrol(this, LastLocation);
+                                Patrol(this, LastLocation);
 
                                 //正常移动过程中有很小概率转向
                                 if (UnityRandom.NextDouble() > 0.9)
@@ -200,13 +200,13 @@ namespace 炸弹超人
                                     }
                                     LastLocation = this.Location;
                                     this.Location.Offset(-5,0);
-                                    if (this!=null) Patrol(this, LastLocation);
+                                    Patrol(this, LastLocation);
                                     Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
                                 LastLocation = this.Location;
                                 this.Location = new Point(Target, this.Location.Y);
-                                if (this!=null) Patrol(this, LastLocation);
+                                Patrol(this, LastLocation);
 
                                 //正常移动过程中有很小概率转向
                                 if (UnityRandom.NextDouble() > 0.9)
@@ -240,13 +240,13 @@ namespace 炸弹超人
                                     }
                                     LastLocation = this.Location;
                                     this.Location.Offset(+5, 0);
-                                    if (this!=null) Patrol(this, LastLocation);
+                                    Patrol(this, LastLocation);
                                     Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
                                 LastLocation = this.Location;
                                 this.Location = new Point(Target, this.Location.Y);
-                                if (this!=null) Patrol(this, LastLocation);
+                                Patrol(this, LastLocation);
 
                                 //正常移动过程中有很小概率转向
                                 if (UnityRandom.NextDouble() > 0.9)

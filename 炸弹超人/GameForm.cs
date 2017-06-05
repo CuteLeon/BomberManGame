@@ -1,4 +1,7 @@
-﻿using System;
+﻿//开启作弊
+#undef Cheat
+
+using System;
 using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -17,6 +20,7 @@ namespace 炸弹超人
 {
     public partial class GameForm : Form
     {
+
         /// <summary>
         /// 奖励物品坐标
         /// </summary>
@@ -76,6 +80,10 @@ namespace 炸弹超人
             this.SetBounds(0,0,Screen .PrimaryScreen .Bounds .Width ,Screen .PrimaryScreen .Bounds .Height );
             GameMap = new Map(Screen.PrimaryScreen.Bounds.Size);
             Player = new PlayerModel(GameMap, new Point(1, 1));
+//作弊：开启全图伤害
+#if (Cheat)
+            Player.BlastRadius = 20;
+#endif
 
             //计算拉伸后的图像
             PlayerCellImage = new Bitmap(UnityResource.Player, GameMap.CellSize);
@@ -404,8 +412,10 @@ namespace 炸弹超人
 
                         SmokePoints.Add(new Cell(DrawLocation,LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
-                        //伤害穿透作弊！
-                        //break;
+//作弊：伤害穿透效果
+#if (!Cheat)
+                        break;
+#endif
                     }
                     else if (GameMap.MapCellsClone[LocationInTabel.Y,LocationInTabel.X] == Map.CellType.Ground)
                     {
@@ -417,8 +427,10 @@ namespace 炸弹超人
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Mine)
                     {
                         MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
-                        //伤害穿透作弊！
-                        //break;
+                        //作弊：伤害穿透效果
+#if (!Cheat)
+                        break;
+#endif
                     }
                 }
 
@@ -432,8 +444,10 @@ namespace 炸弹超人
 
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
-                        //伤害穿透作弊！
-                        //break;
+                        //作弊：伤害穿透效果
+#if (!Cheat)
+                        break;
+#endif
                     }
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Ground)
                     {
@@ -445,8 +459,10 @@ namespace 炸弹超人
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Mine)
                     {
                         MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
-                        //伤害穿透作弊！
-                        //break;
+                        //作弊：伤害穿透效果
+#if (!Cheat)
+                        break;
+#endif
                     }
                 }
 
@@ -460,8 +476,10 @@ namespace 炸弹超人
 
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
-                        //伤害穿透作弊！
-                        //break;
+                        //作弊：伤害穿透效果
+#if (!Cheat)
+                        break;
+#endif
                     }
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Ground)
                     {
@@ -473,8 +491,10 @@ namespace 炸弹超人
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Mine)
                     {
                         MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
-                        //伤害穿透作弊！
-                        //break;
+                        //作弊：伤害穿透效果
+#if (!Cheat)
+                        break;
+#endif
                     }
                 }
                 for (int Radius = 1; Radius <= Player.BlastRadius; Radius++)
@@ -487,8 +507,10 @@ namespace 炸弹超人
 
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
-                        //伤害穿透作弊！
-                        //break;
+                        //作弊：伤害穿透效果
+#if (!Cheat)
+                        break;
+#endif
                     }
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Ground)
                     {
@@ -500,8 +522,10 @@ namespace 炸弹超人
                     else if (GameMap.MapCellsClone[LocationInTabel.Y, LocationInTabel.X] == Map.CellType.Mine)
                     {
                         MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
-                        //伤害穿透作弊！
-                        //break;
+                        //作弊：伤害穿透效果
+#if (!Cheat)
+                        break;
+#endif
                     }
                 }
 
