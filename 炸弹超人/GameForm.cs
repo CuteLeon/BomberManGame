@@ -1,6 +1,7 @@
 ﻿//开启作弊
-#define Cheat
+#define MaxBlast
 #define God
+#define Fly
 
 using System;
 using System.Threading;
@@ -81,7 +82,7 @@ namespace 炸弹超人
             GameMap = new Map(Screen.PrimaryScreen.Bounds.Size);
             Player = new PlayerModel(GameMap, new Point(1, 1));
 //作弊：开启全图伤害
-#if (Cheat)
+#if (MaxBlast)
             Player.BlastRadius = 20;
             Player.DefaultBombCount = 100;
 #endif
@@ -110,12 +111,16 @@ namespace 炸弹超人
 
         private void GameForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (PlayerMoveing) return;
             switch (e.KeyCode)
             {
                 case Keys.Up:
                     {
+                        if (PlayerMoveing) return;
+#if (Fly)
+                        if (GameMap.MapCellsClone[Player.TabelLocation.Y - 1, Player.TabelLocation.X] != Map.CellType.Stone)
+#else
                         if (GameMap.MapCellsClone[Player.TabelLocation.Y - 1, Player.TabelLocation.X] == Map.CellType.Ground)
+#endif
                         {
                             PlayerMoveing = true;
                             Player.TabelLocation.Offset(0, -1);
@@ -132,8 +137,32 @@ namespace 炸弹超人
                                         Player.Location.Offset(0, -5);
                                         UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
                                     }
+#if (Fly)
+                                    if (GameMap.MapCellsClone[Player.TabelLocation.Y + 1, Player.TabelLocation.X] == Map.CellType.Wall)
+                                    {
+                                        Player.Location = new Point(Player.Location.X, Target);
+                                        UnityGraphics.DrawImage(UnityResource.Wall, new Rectangle(new Point(Player.Location.X, Player.Location.Y + GameMap.CellSize.Height), GameMap.CellSize));
+                                    }
+                                    else
+                                    {
+                                        Player.Location = new Point(Player.Location.X,Target);
+                                        UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(new Point(Player.Location.X, Player.Location.Y + GameMap.CellSize.Height), GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), new Point(Player.Location.X, Player.Location.Y + GameMap.CellSize.Height));
+                                    }
+                                    if (GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X] == Map.CellType.Wall)
+                                    {
+                                        UnityGraphics.DrawImage(UnityResource.Wall, new Rectangle(Player.Location, GameMap.CellSize));
+                                    }
+                                    else
+                                    {
+                                        UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    }
+                                    UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
+#else
                                     //屏蔽掉，会有很有趣的痕迹效果
                                     UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    Player.Location = new Point(Target, Player.Location.Y);
+                                    UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
+#endif
                                     Player.Location = new Point(Player.Location.X, Target);
                                     UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
                                 }
@@ -146,7 +175,12 @@ namespace 炸弹超人
                     }
                 case Keys.Down:
                     {
+                        if (PlayerMoveing) return;
+#if (Fly)
+                        if (GameMap.MapCellsClone[Player.TabelLocation.Y + 1, Player.TabelLocation.X] != Map.CellType.Stone)
+#else
                         if (GameMap.MapCellsClone[Player.TabelLocation.Y + 1, Player.TabelLocation.X] == Map.CellType.Ground)
+#endif
                         {
                             PlayerMoveing = true;
                             Player.TabelLocation.Offset(0, 1);
@@ -163,8 +197,32 @@ namespace 炸弹超人
                                         Player.Location.Offset(0, 5);
                                         UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
                                     }
+#if (Fly)
+                                    if (GameMap.MapCellsClone[Player.TabelLocation.Y-1, Player.TabelLocation.X] == Map.CellType.Wall)
+                                    {
+                                        Player.Location = new Point(Player.Location.X, Target);
+                                        UnityGraphics.DrawImage(UnityResource.Wall, new Rectangle(new Point(Player.Location.X, Player.Location.Y - GameMap.CellSize.Height), GameMap.CellSize));
+                                    }
+                                    else
+                                    {
+                                        Player.Location = new Point(Player.Location.X, Target);
+                                        UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(new Point(Player.Location.X, Player.Location.Y - GameMap.CellSize.Height), GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb),new Point(Player.Location.X, Player.Location.Y - GameMap.CellSize.Height));
+                                    }
+                                    if (GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X] == Map.CellType.Wall)
+                                    {
+                                        UnityGraphics.DrawImage(UnityResource.Wall, new Rectangle(Player.Location, GameMap.CellSize));
+                                    }
+                                    else
+                                    {
+                                        UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    }
+                                    UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
+#else
                                     //屏蔽掉，会有很有趣的痕迹效果
                                     UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    Player.Location = new Point(Target, Player.Location.Y);
+                                    UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
+#endif
                                     Player.Location = new Point(Player.Location.X, Target);
                                     UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
                                 }
@@ -177,7 +235,12 @@ namespace 炸弹超人
                     }
                 case Keys.Left:
                     {
+                        if (PlayerMoveing) return;
+#if (Fly)
+                        if (GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X - 1] != Map.CellType.Stone)
+#else
                         if (GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X - 1] == Map.CellType.Ground)
+#endif
                         {
                             PlayerMoveing = true;
                             Player.TabelLocation.Offset(-1, 0);
@@ -194,8 +257,32 @@ namespace 炸弹超人
                                         Player.Location.Offset(-5, 0);
                                         UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
                                     }
+#if (Fly)
+                                    if (GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X + 1] == Map.CellType.Wall)
+                                    {
+                                        Player.Location = new Point(Target, Player.Location.Y);
+                                        UnityGraphics.DrawImage(UnityResource.Wall, new Rectangle(new Point(Player.Location.X + GameMap.CellSize.Width, Player.Location.Y), GameMap.CellSize));
+                                    }
+                                    else
+                                    {
+                                        Player.Location = new Point(Target, Player.Location.Y);
+                                        UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(new Point(Player.Location.X + GameMap.CellSize.Width, Player.Location.Y), GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), new Point(Player.Location.X + GameMap.CellSize.Width, Player.Location.Y));
+                                    }
+                                    if (GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X] == Map.CellType.Wall)
+                                    {
+                                        UnityGraphics.DrawImage(UnityResource.Wall, new Rectangle(Player.Location, GameMap.CellSize));
+                                    }
+                                    else
+                                    {
+                                        UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    }
+                                    UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
+#else
                                     //屏蔽掉，会有很有趣的痕迹效果
                                     UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    Player.Location = new Point(Target, Player.Location.Y);
+                                    UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
+#endif
                                     Player.Location = new Point(Target, Player.Location.Y);
                                     UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
                                 }
@@ -208,7 +295,12 @@ namespace 炸弹超人
                     }
                 case Keys.Right:
                     {
+                        if (PlayerMoveing) return;
+#if (Fly)
+                        if (GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X + 1] != Map.CellType.Stone)
+#else
                         if (GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X + 1] == Map.CellType.Ground)
+#endif
                         {
                             PlayerMoveing = true;
                             Player.TabelLocation.Offset(1, 0);
@@ -225,10 +317,32 @@ namespace 炸弹超人
                                         Player.Location.Offset(5, 0);
                                         UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
                                     }
+#if (Fly)
+                                    if (GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X - 1] == Map.CellType.Wall)
+                                    {
+                                        Player.Location = new Point(Target, Player.Location.Y);
+                                        UnityGraphics.DrawImage(UnityResource.Wall, new Rectangle(new Point(Player.Location.X - GameMap.CellSize.Width, Player.Location.Y), GameMap.CellSize));
+                                    }
+                                    else
+                                    {
+                                        Player.Location = new Point(Target, Player.Location.Y);
+                                        UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(new Point(Player.Location.X - GameMap.CellSize.Width, Player.Location.Y), GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), new Point(Player.Location.X - GameMap.CellSize.Width, Player.Location.Y));
+                                    }
+                                    if (GameMap.MapCellsClone[Player.TabelLocation.Y, Player.TabelLocation.X] == Map.CellType.Wall)
+                                    {
+                                        UnityGraphics.DrawImage(UnityResource.Wall, new Rectangle(Player.Location, GameMap.CellSize));
+                                    }
+                                    else
+                                    {
+                                        UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
+                                    }
+                                    UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
+#else
                                     //屏蔽掉，会有很有趣的痕迹效果
                                     UnityGraphics.DrawImage(Player.Ground.Clone(new Rectangle(Player.Location, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), Player.Location);
                                     Player.Location = new Point(Target, Player.Location.Y);
                                     UnityGraphics.DrawImageUnscaled(PlayerCellImage, Player.Location);
+#endif
                                 }
                                 PlayerMoveing = false;
                                 DrawMinesAndGiftAndDoor();
@@ -419,7 +533,7 @@ namespace 炸弹超人
                         SmokePoints.Add(new Cell(DrawLocation,LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
 //作弊：伤害穿透效果
-#if (!Cheat)
+#if (!MaxBlast)
                         break;
 #endif
                     }
@@ -434,7 +548,7 @@ namespace 炸弹超人
                     {
                         MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
                         //作弊：伤害穿透效果
-#if (!Cheat)
+#if (!MaxBlast)
                         break;
 #endif
                     }
@@ -451,7 +565,7 @@ namespace 炸弹超人
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
                         //作弊：伤害穿透效果
-#if (!Cheat)
+#if (!MaxBlast)
                         break;
 #endif
                     }
@@ -466,7 +580,7 @@ namespace 炸弹超人
                     {
                         MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
                         //作弊：伤害穿透效果
-#if (!Cheat)
+#if (!MaxBlast)
                         break;
 #endif
                     }
@@ -483,7 +597,7 @@ namespace 炸弹超人
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
                         //作弊：伤害穿透效果
-#if (!Cheat)
+#if (!MaxBlast)
                         break;
 #endif
                     }
@@ -498,7 +612,7 @@ namespace 炸弹超人
                     {
                         MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
                         //作弊：伤害穿透效果
-#if (!Cheat)
+#if (!MaxBlast)
                         break;
 #endif
                     }
@@ -514,7 +628,7 @@ namespace 炸弹超人
                         SmokePoints.Add(new Cell(DrawLocation, LocationInTabel));
                         UnityGraphics.DrawImageUnscaled(WallBrokenCellImage, DrawLocation);
                         //作弊：伤害穿透效果
-#if (!Cheat)
+#if (!MaxBlast)
                         break;
 #endif
                     }
@@ -529,7 +643,7 @@ namespace 炸弹超人
                     {
                         MineList.Where(X => X.TabelLocation.Equals(LocationInTabel))?.First().BlastNow();
                         //作弊：伤害穿透效果
-#if (!Cheat)
+#if (!MaxBlast)
                         break;
 #endif
                     }
@@ -622,11 +736,10 @@ namespace 炸弹超人
         {
             int EnemyIndex = 0;
             Rectangle TempRectangle;
-            while (EnemyIndex < EnemyList.Count)
+            while (EnemyIndex>=0 && EnemyIndex < EnemyList.Count)
             {
                 foreach (Cell SmokePoint in SmokePoints)
                 {
-                    if (EnemyIndex >= EnemyList.Count) break;
                     TempRectangle = new Rectangle(EnemyList[EnemyIndex].Location, GameMap.CellSize);
                     TempRectangle.Intersect(new Rectangle(SmokePoint.Location, GameMap.CellSize));
                     if ((double)(TempRectangle.Width * TempRectangle.Height) / (double)(GameMap.CellSize.Width * GameMap.CellSize.Width) > 0.3)
@@ -643,19 +756,18 @@ namespace 炸弹超人
                     }
                 }
                 EnemyIndex++;
-
-                //if (((List<Cell>)SmokePoints).FirstOrDefault(X => new Rectangle(X.Location,GameMap.CellSize).IntersectsWith(new Rectangle(EnemyList[EnemyIndex].Location,GameMap.CellSize))) != null)
-                //{
-                //    //Debug.Print("敌人 {0} : {1},{2} 被炸伤，退出战场！剩余敌人总数：{3}", EnemyIndex, EnemyList[EnemyIndex].TabelLocation.X, EnemyList[EnemyIndex].TabelLocation.Y, EnemyList.Count - 1);
-                //    lock(EnemyDeadCellImage)
-                //        UnityGraphics.DrawImageUnscaled(EnemyDeadCellImage, EnemyList[EnemyIndex].Location);
-                //    EnemyList[EnemyIndex].Dispose();//结束敌人的巡逻线程，否则不会释放内存
-                //    EnemyList[EnemyIndex].Patrol -= new EnemyModel.PatrolEventHander(EnemyPatrol);
-                //    EnemyList.RemoveAt(EnemyIndex);
-                //}
-                //else
-                //    EnemyIndex++;
             }
+            //if (((List<Cell>)SmokePoints).FirstOrDefault(X => new Rectangle(X.Location,GameMap.CellSize).IntersectsWith(new Rectangle(EnemyList[EnemyIndex].Location,GameMap.CellSize))) != null)
+            //{
+            //    //Debug.Print("敌人 {0} : {1},{2} 被炸伤，退出战场！剩余敌人总数：{3}", EnemyIndex, EnemyList[EnemyIndex].TabelLocation.X, EnemyList[EnemyIndex].TabelLocation.Y, EnemyList.Count - 1);
+            //    lock(EnemyDeadCellImage)
+            //        UnityGraphics.DrawImageUnscaled(EnemyDeadCellImage, EnemyList[EnemyIndex].Location);
+            //    EnemyList[EnemyIndex].Dispose();//结束敌人的巡逻线程，否则不会释放内存
+            //    EnemyList[EnemyIndex].Patrol -= new EnemyModel.PatrolEventHander(EnemyPatrol);
+            //    EnemyList.RemoveAt(EnemyIndex);
+            //}
+            //else
+            //    EnemyIndex++;
             GC.Collect();
 #if (!God)
             foreach (Cell SmokePoint in SmokePoints)
@@ -672,6 +784,9 @@ namespace 炸弹超人
                     return true;
                 }
             }
+#endif
+#if (Fly)
+            this.CreateGraphics().DrawImageUnscaled(PlayerCellImage,Player.Location);
 #endif
             return false;
 

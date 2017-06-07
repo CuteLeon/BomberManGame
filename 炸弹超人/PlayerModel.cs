@@ -78,7 +78,6 @@ namespace 炸弹超人
             BombLeftCount = DefaultBombCount;
             Location = PlayerModel.DefaultLocation.Location;
             TabelLocation = PlayerModel.DefaultLocation.TabelLocation;
-            System.Diagnostics.Debug.Print(DefaultLocation.Location.ToString());
         }
     }
 }
