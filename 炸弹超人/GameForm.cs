@@ -1,5 +1,6 @@
 ﻿//开启作弊
-#undef Cheat
+#define Cheat
+#define God
 
 using System;
 using System.Threading;
@@ -13,8 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-//todo:奖励 通关门
-//todo:爆炸后敌人在爆炸范围外的图像无法擦除
+//todo:鉴于超低的CPU占用和不尽人意的显示效果：使用Timer作为引擎，控制怪物移动和炸弹引爆，和绘制前端图层（玩家 奖励 炸弹 通关门 火焰 敌人）
 
 namespace 炸弹超人
 {
@@ -83,6 +83,7 @@ namespace 炸弹超人
 //作弊：开启全图伤害
 #if (Cheat)
             Player.BlastRadius = 20;
+            Player.DefaultBombCount = 100;
 #endif
 
             //计算拉伸后的图像
@@ -312,8 +313,11 @@ namespace 炸弹超人
             using (Graphics UnityGraphics = this.CreateGraphics())
             {
                 //绘制炸弹
-                foreach (Cell Mine in MineList)
-                    UnityGraphics.DrawImageUnscaled(MineCellImage, Mine.Location);
+                lock (MineList)
+                {
+                    foreach (Cell Mine in MineList)
+                        UnityGraphics.DrawImageUnscaled(MineCellImage, Mine.Location);
+                }
 
                 //绘制奖励和通关门
                 if (GiftLocation!=null) UnityGraphics.DrawImageUnscaled(GiftCellImage,GiftLocation.Location);
@@ -359,6 +363,7 @@ namespace 炸弹超人
                 UnityGraphics.DrawImage(Sender.MapGround.Clone(new Rectangle(EnemyLocation, GameMap.CellSize), System.Drawing.Imaging.PixelFormat.Format32bppArgb), EnemyLocation);
                 UnityGraphics.DrawImageUnscaled(Sender.EnemyCellImage, Sender.Location);
 
+#if (!God)
                 //玩家与敌人碰撞，受伤
                 Rectangle TempRectangle;
                 TempRectangle = new Rectangle(Sender.Location, GameMap.CellSize);
@@ -384,6 +389,7 @@ namespace 炸弹超人
                 //    }));
                 //    return;
                 //}
+#endif
             }
             GC.Collect();
         }
@@ -539,8 +545,8 @@ namespace 炸弹超人
                     }
                 //}).Invoke();
                 //多线程允许传入任意多个参数
-
-                MineList.Remove(sender);
+                lock (MineList)
+                    MineList.Remove(sender);
             }
         }
 
@@ -620,17 +626,20 @@ namespace 炸弹超人
             {
                 foreach (Cell SmokePoint in SmokePoints)
                 {
+                    if (EnemyIndex >= EnemyList.Count) break;
                     TempRectangle = new Rectangle(EnemyList[EnemyIndex].Location, GameMap.CellSize);
                     TempRectangle.Intersect(new Rectangle(SmokePoint.Location, GameMap.CellSize));
                     if ((double)(TempRectangle.Width * TempRectangle.Height) / (double)(GameMap.CellSize.Width * GameMap.CellSize.Width) > 0.3)
                     {
                         lock (EnemyDeadCellImage)
+                        {
                             UnityGraphics.DrawImageUnscaled(EnemyDeadCellImage, EnemyList[EnemyIndex].Location);
-                        EnemyList[EnemyIndex].Dispose();//结束敌人的巡逻线程，否则不会释放内存
-                        EnemyList[EnemyIndex].Patrol -= new EnemyModel.PatrolEventHander(EnemyPatrol);
-                        EnemyList.RemoveAt(EnemyIndex);
-                        EnemyIndex--;
-                        break;
+                            EnemyList[EnemyIndex].Dispose();//结束敌人的巡逻线程，否则不会释放内存
+                            EnemyList[EnemyIndex].Patrol -= new EnemyModel.PatrolEventHander(EnemyPatrol);
+                            EnemyList.RemoveAt(EnemyIndex);
+                            EnemyIndex--;
+                            break;
+                        }
                     }
                 }
                 EnemyIndex++;
@@ -648,7 +657,7 @@ namespace 炸弹超人
                 //    EnemyIndex++;
             }
             GC.Collect();
-
+#if (!God)
             foreach (Cell SmokePoint in SmokePoints)
             {
                 TempRectangle = new Rectangle(SmokePoint.Location, GameMap.CellSize);
@@ -663,6 +672,7 @@ namespace 炸弹超人
                     return true;
                 }
             }
+#endif
             return false;
 
             //if (((List<Cell>)SmokePoints).FirstOrDefault(X => new Rectangle(X.Location, GameMap.CellSize).IntersectsWith(new Rectangle(Player.Location, GameMap.CellSize))) != null)

@@ -111,6 +111,7 @@ namespace 炸弹超人
                                 int Target = this.TabelLocation.Y * GameMap.CellSize.Height + GameMap.PaddingSize.Height;
                                 while (this.Location.Y > Target + 5)
                                 {
+                                    Thread.Sleep(100);
                                     //检查玩家是不是紧跟着放置了炸弹
                                     if (GameMap.MapCellsClone[TabelLocation.Y, TabelLocation.X] == Map.CellType.Mine)
                                     {
@@ -118,14 +119,17 @@ namespace 炸弹超人
                                         PlaceBombClose = true;
                                         break;
                                     }
-                                    LastLocation = this.Location;
+                                    LastLocation =new Point(this.Location.X,this.Location.Y);
                                     this.Location.Offset(0, -5);
+                                    if (this == null) System.Windows.Forms.MessageBox.Show("this is null.");
+                                    if (LastLocation == null) System.Windows.Forms.MessageBox.Show("LastLocation is null.");
                                     Patrol(this, LastLocation);
-                                    Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
-                                LastLocation = this.Location;
+                                LastLocation =new Point(this.Location.X,this.Location.Y);
                                 this.Location = new Point(this.Location.X, Target);
+                                if (this == null) System.Windows.Forms.MessageBox.Show("this is null.");
+                                if (LastLocation == null) System.Windows.Forms.MessageBox.Show("LastLocation is null.");
                                 Patrol(this, LastLocation);
 
                                 //正常移动过程中有很小概率转向
@@ -151,6 +155,7 @@ namespace 炸弹超人
                                 int Target = this.TabelLocation.Y * GameMap.CellSize.Height + GameMap.PaddingSize.Height;
                                 while (this.Location.Y < Target - 5)
                                 {
+                                    Thread.Sleep(100);
                                     //检查玩家是不是紧跟着放置了炸弹
                                     if (GameMap.MapCellsClone[TabelLocation.Y, TabelLocation.X] == Map.CellType.Mine)
                                     {
@@ -158,14 +163,17 @@ namespace 炸弹超人
                                         PlaceBombClose = true;
                                         break;
                                     }
-                                    LastLocation = this.Location;
+                                    LastLocation =new Point(this.Location.X,this.Location.Y);
                                     this.Location.Offset(0, +5);
+                                    if (this == null) System.Windows.Forms.MessageBox.Show("this is null.");
+                                    if (LastLocation == null) System.Windows.Forms.MessageBox.Show("LastLocation is null.");
                                     Patrol(this, LastLocation);
-                                    Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
-                                LastLocation = this.Location;
+                                LastLocation =new Point(this.Location.X,this.Location.Y);
                                 this.Location = new Point(this.Location.X, Target);
+                                if (this == null) System.Windows.Forms.MessageBox.Show("this is null.");
+                                if (LastLocation == null) System.Windows.Forms.MessageBox.Show("LastLocation is null.");
                                 Patrol(this, LastLocation);
 
                                 //正常移动过程中有很小概率转向
@@ -191,6 +199,7 @@ namespace 炸弹超人
                                 int Target = this.TabelLocation.X * GameMap.CellSize.Width + GameMap.PaddingSize.Width;
                                 while (this.Location.X > Target + 5)
                                 {
+                                    Thread.Sleep(100);
                                     //检查玩家是不是紧跟着放置了炸弹
                                     if (GameMap.MapCellsClone[TabelLocation.Y, TabelLocation.X] == Map.CellType.Mine)
                                     {
@@ -198,14 +207,17 @@ namespace 炸弹超人
                                         PlaceBombClose = true;
                                         break;
                                     }
-                                    LastLocation = this.Location;
+                                    LastLocation =new Point(this.Location.X,this.Location.Y);
                                     this.Location.Offset(-5,0);
+                                    if (this == null) System.Windows.Forms.MessageBox.Show("this is null.");
+                                    if (LastLocation == null) System.Windows.Forms.MessageBox.Show("LastLocation is null.");
                                     Patrol(this, LastLocation);
-                                    Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
-                                LastLocation = this.Location;
+                                LastLocation =new Point(this.Location.X,this.Location.Y);
                                 this.Location = new Point(Target, this.Location.Y);
+                                if (this == null) System.Windows.Forms.MessageBox.Show("this is null.");
+                                if (LastLocation == null) System.Windows.Forms.MessageBox.Show("LastLocation is null.");
                                 Patrol(this, LastLocation);
 
                                 //正常移动过程中有很小概率转向
@@ -231,6 +243,7 @@ namespace 炸弹超人
                                 int Target = this.TabelLocation.X * GameMap.CellSize.Width + GameMap.PaddingSize.Width;
                                 while (this.Location.X < Target - 5)
                                 {
+                                    Thread.Sleep(100);
                                     //检查玩家是不是紧跟着放置了炸弹
                                     if (GameMap.MapCellsClone[TabelLocation.Y, TabelLocation.X] == Map.CellType.Mine)
                                     {
@@ -238,14 +251,17 @@ namespace 炸弹超人
                                         PlaceBombClose = true;
                                         break;
                                     }
-                                    LastLocation = this.Location;
+                                    LastLocation =new Point(this.Location.X,this.Location.Y);
                                     this.Location.Offset(+5, 0);
+                                    if (this == null) System.Windows.Forms.MessageBox.Show("this is null.");
+                                    if (LastLocation == null) System.Windows.Forms.MessageBox.Show("LastLocation is null.");
                                     Patrol(this, LastLocation);
-                                    Thread.Sleep(100);
                                 }
                                 if (PlaceBombClose) break;
-                                LastLocation = this.Location;
+                                LastLocation =new Point(this.Location.X,this.Location.Y);
                                 this.Location = new Point(Target, this.Location.Y);
+                                if (this == null) System.Windows.Forms.MessageBox.Show("this is null.");
+                                if (LastLocation == null) System.Windows.Forms.MessageBox.Show("LastLocation is null.");
                                 Patrol(this, LastLocation);
 
                                 //正常移动过程中有很小概率转向
